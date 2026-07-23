@@ -44,7 +44,21 @@
     </section>
   </div>
 
+  <div id="translationOptions" class="translationOptions">
+    <label><input id="strictMode" type="checkbox"> Strict unknown-word mode</label>
+    <span>Off: preserve unknown terms in «quotes». On: expose them as [untranslated].</span>
+  </div>
+
   <div id="notes" class="notes" hidden></div>
+
+  <section id="unknownResolver" class="unknownResolver" hidden>
+    <div>
+      <h2>Resolve unknown terms</h2>
+      <p>Keep a term quoted, or map it deliberately to an existing English concept.</p>
+    </div>
+    <div id="unknownItems" class="unknownItems"></div>
+    <datalist id="conceptList"></datalist>
+  </section>
 
   <div class="examples">
     <span class="label">Try:</span>
@@ -102,6 +116,7 @@
 </footer>
 
 <script src="data.js"></script>
+<script src="aliases.js"></script>
 <script src="app.js"></script>
 <script src="ui.js"></script>
 </body>

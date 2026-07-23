@@ -5,7 +5,11 @@
   "use strict";
 
   const D = global.SENEL_DATA;
+  const X = global.SENEL_ENGLISH;
   const T = D.tables;
+  const CATALOG = {};
+  const PREFERRED = {};
+  const MODALS = Object.assign({}, T.modals, X.modals);
   const LEX = new Map(D.lexicon.map((e) => [e.f, e]));
   const AFFIX = new Map(
     D.lexicon.filter((e) => e.c === "AFFIX").map((e) => [e.f.replace(/-/g, ""), e])
@@ -16,7 +20,7 @@
   const COPULA = set(T.copula), HAVE = set(T.have), DO = set(T.doSupport),
     NEG = set(T.negators), DROP = set(T.drop), PAST_CUES = set(T.pastCues),
     HEARSAY = set(T.hearsayCues), INFER = set(T.inferCues),
-    OPINION = set(T.opinionVerbs),
+    OPINION = set(T.opinionVerbs), PAST_IRREGULAR = set(X.pastIrregularForms),
     VERBAL = set(T.verbal), PROPERTY = set(T.property);
 
   const clean = (g) => g.replace(/\s*\(.*?\)/g, "").split(/[,;]/)[0].trim();
@@ -29,6 +33,36 @@
     if (VERBAL.has(key) || VERBAL.has(k)) return "verb";
     if (PROPERTY.has(key) || PROPERTY.has(k)) return "property";
     return "noun";
+  }
+
+  function expressionPos(form) {
+    const first = form.split(" ")[0], entry = LEX.get(first);
+    if (entry) return posOf(first, entry.c);
+    for (const prefix of ["na", "re", "se"]) {
+      const base = first.startsWith(prefix) ? first.slice(prefix.length) : "";
+      const e = LEX.get(base);
+      if (e) return posOf(base, e.c);
+    }
+    for (const [suffix, pos] of [["ra", "noun"], ["te", "noun"], ["wa", "noun"],
+      ["ko", "noun"], ["pi", "property"], ["mu", "noun"], ["di", "property"],
+      ["go", "property"], ["la", "verb"], ["yi", "verb"], ["no", "noun"]])
+      if (first.endsWith(suffix) && LEX.has(first.slice(0, -suffix.length))) return pos;
+    return "noun";
+  }
+
+  for (const [phrase, form] of Object.entries(D.english))
+    CATALOG[phrase] = { f: form, p: expressionPos(form), s: "base", c: phrase };
+
+  const normaliseAliasPhrase = (value) =>
+    (value.toLowerCase().replace(/-/g, " ").match(/[a-z]+|[0-9]+/g) || []).join(" ");
+  for (const line of X.raw.split(/\r?\n/)) {
+    if (!line || line.startsWith("#")) continue;
+    const [canonical, pos, form, aliases] = line.split("\t");
+    const record = { f: form, p: pos, s: "aliases", c: canonical };
+    for (const phrase of [canonical].concat(aliases.split("|")))
+      CATALOG[normaliseAliasPhrase(phrase)] = record;
+    if (!form.includes(" ") && !LEX.has(form) && !PREFERRED[form])
+      PREFERRED[form] = { text: canonical, pos };
   }
 
   /* ---- morphology of a single Senel word: root, derivation or compound ---- */
@@ -62,12 +96,114 @@
 
   /* --------------------------- English -> Senel --------------------------- */
 
+  function normaliseEnglish(text) {
+    let value = text.replace(/[’‘]/g, "'").toLowerCase();
+    for (const contraction of Object.keys(X.contractions).sort((a, b) => b.length - a.length)) {
+      const escaped = contraction.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+      value = value.replace(new RegExp(`(^|[^a-z])${escaped}(?=$|[^a-z])`, "g"),
+        (_, lead) => lead + X.contractions[contraction]);
+    }
+    value = value.replace(/-/g, " ");
+    return value.match(/[a-z]+|[0-9]+/g) || [];
+  }
+
+  function lemmaCandidates(word) {
+    const out = [word];
+    const add = (x) => { if (x && x.length >= 2 && !out.includes(x)) out.push(x); };
+    if (T.irregular[word]) add(T.irregular[word]);
+    if (word.endsWith("ied") && word.length > 4) add(word.slice(0, -3) + "y");
+    if (word.endsWith("ies") && word.length > 4) add(word.slice(0, -3) + "y");
+    if (word.endsWith("ing") && word.length > 5) {
+      const stem = word.slice(0, -3); add(stem); add(stem + "e");
+      if (stem.length > 3 && stem.at(-1) === stem.at(-2)) add(stem.slice(0, -1));
+    }
+    if (word.endsWith("ed") && word.length > 4) {
+      const stem = word.slice(0, -2); add(stem); add(stem + "e");
+      if (stem.length > 3 && stem.at(-1) === stem.at(-2)) add(stem.slice(0, -1));
+    }
+    if (word.endsWith("es") && word.length > 4) { add(word.slice(0, -2)); add(word.slice(0, -1)); }
+    if (word.endsWith("s") && !word.endsWith("ss") && word.length > 3) add(word.slice(0, -1));
+    return out;
+  }
+
   function lemma(w) {
-    if (T.irregular[w]) return T.irregular[w];
-    for (const [suf, repl] of [["ies", "y"], ["ing", ""], ["ed", ""], ["es", ""], ["s", ""]])
-      if (w.endsWith(suf) && w.length - suf.length >= 3)
-        return w.slice(0, w.length - suf.length) + repl;
-    return w;
+    const candidates = lemmaCandidates(w);
+    return candidates.length > 1 ? candidates[1] : w;
+  }
+
+  function knownRecord(word, preferInflected = false) {
+    const candidates = lemmaCandidates(word);
+    if (preferInflected && (word.endsWith("ing") || word.endsWith("ed") || T.irregular[word]))
+      for (const candidate of candidates.slice(1)) {
+        const record = CATALOG[candidate];
+        if (record && record.p === "verb") return [record, candidate];
+      }
+    for (const candidate of candidates)
+      if (CATALOG[candidate]) return [CATALOG[candidate], candidate];
+    return [null, null];
+  }
+
+  function productiveRecord(word) {
+    for (const [english, senelPrefix] of [["self", "se"], ["auto", "se"],
+      ["non", "na"], ["un", "na"], ["in", "na"], ["im", "na"],
+      ["ir", "na"], ["il", "na"], ["re", "re"]]) {
+      if (!word.startsWith(english) || word.length - english.length < 3) continue;
+      const [base] = knownRecord(word.slice(english.length), true);
+      if (base && !base.f.includes(" "))
+        return { f: senelPrefix + base.f, p: base.p, s: "productive-prefix", c: word };
+    }
+    for (const [suffix, senelSuffix, pos] of [["ness", "mu", "noun"],
+      ["ity", "mu", "noun"], ["ment", "ko", "noun"], ["tion", "ko", "noun"],
+      ["er", "ra", "noun"], ["or", "ra", "noun"], ["ist", "ra", "noun"],
+      ["ful", "pi", "property"], ["less", "pi", "property"],
+      ["able", "pi", "property"], ["ible", "pi", "property"]]) {
+      if (!word.endsWith(suffix) || word.length - suffix.length < 3) continue;
+      const stem = word.slice(0, -suffix.length), stems = [stem];
+      if (stem.endsWith("i")) stems.push(stem.slice(0, -1) + "y");
+      if (stem.length > 3 && stem.at(-1) === stem.at(-2)) stems.push(stem.slice(0, -1));
+      for (const candidate of stems) {
+        const [base] = knownRecord(candidate);
+        if (base && !base.f.includes(" ")) {
+          const form = suffix === "less" ? "na" + base.f : base.f + senelSuffix;
+          return { f: form, p: pos, s: "productive-suffix", c: word };
+        }
+      }
+    }
+    for (let split = 3; split < word.length - 2; split++) {
+      const [left] = knownRecord(word.slice(0, split));
+      const [right] = knownRecord(word.slice(split));
+      if (!left || !right || left.f.includes(" ") || right.f.includes(" ")) continue;
+      if (left.p === "gram" || right.p === "gram") continue;
+      return { f: left.f + right.f, p: right.p, s: "productive-compound", c: word };
+    }
+    return null;
+  }
+
+  function resolveWord(word, productive = true, preferInflected = false) {
+    const [record, candidate] = knownRecord(word, preferInflected);
+    if (record) return [record, candidate];
+    return [productive ? productiveRecord(word) : null, word];
+  }
+
+  function makeTrie() {
+    const root = {};
+    for (const [phrase, record] of Object.entries(CATALOG)) {
+      let node = root;
+      for (const token of phrase.split(" ")) node = node[token] ||= {};
+      node.$ = record;
+    }
+    return root;
+  }
+  const PHRASE_TRIE = makeTrie();
+
+  function longestPhrase(words, start) {
+    let node = PHRASE_TRIE, best = null;
+    for (let end = start; end < words.length; end++) {
+      node = node[words[end]];
+      if (!node) break;
+      if (node.$) best = [node.$, end - start + 1];
+    }
+    return best;
   }
 
   function comparative(word) {
@@ -79,8 +215,8 @@
       if (stem.length > 3 && stem[stem.length - 1] === stem[stem.length - 2])
         tries.push(stem.slice(0, -1));
       for (const c of tries)
-        if (D.english[c]) {
-          let form = D.english[c];
+        if (CATALOG[c] && CATALOG[c].p === "property") {
+          let form = CATALOG[c].f;
           if ((form.endsWith("go") || form.endsWith("di")) && form.length > 4)
             form = form.slice(0, -2);
           return [particle].concat(form.split(" "));
@@ -91,38 +227,59 @@
 
   function verbSlot(tokens) {
     for (let i = 0; i < tokens.length; i++) {
-      const e = LEX.get(tokens[i]);
-      if (e && e.c === "ROOT") return i;
+      const tok = tokens[i], entry = LEX.get(tok);
+      if (entry && ["verb", "property"].includes(posOf(tok, entry.c))) return i;
+      for (const prefix of ["na", "re", "se"]) {
+        const base = tok.startsWith(prefix) ? tok.slice(prefix.length) : "";
+        const e = LEX.get(base);
+        if (e && ["verb", "property"].includes(posOf(base, e.c))) return i;
+      }
+      for (const [suffix, pos] of [["la", "verb"], ["yi", "verb"],
+        ["pi", "property"], ["di", "property"], ["go", "property"]])
+        if (tok.endsWith(suffix) && LEX.has(tok.slice(0, -suffix.length)) &&
+            ["verb", "property"].includes(pos)) return i;
     }
     return tokens.length;
   }
 
-  function en2sn(text) {
-    const notes = [], out = [];
-    const raw = text.trim();
-    const isQuestion = raw.endsWith("?");
-    let words = (raw.toLowerCase().replace(/n't/g, " not").match(/[a-z']+/g) || []);
+  function en2sn(text, options = {}) {
+    const strict = Boolean(options.strict), overrides = options.overrides || {},
+      notes = [], out = [];
+    const raw = text.trim(), isQuestion = raw.endsWith("?");
+    let words = normaliseEnglish(raw);
     if (!words.length) return { text: "", notes };
 
     let aspect = null, negate = false, modal = null, evidential = null,
       leadWh = null, firstPerson = false, opinion = false;
     const joined = words.join(" ");
+    const resolved = (token, productive = false, preferInflected = false) => {
+      const overrideKey = token && overrides[token]
+        ? normaliseAliasPhrase(overrides[token]) : "";
+      return (overrideKey ? CATALOG[overrideKey] : null)
+        || resolveWord(token, productive, preferInflected)[0];
+    };
+    const isInflectedVerb = (token, endings = []) => {
+      const [record, candidate] = resolveWord(token, false, true);
+      if (!record || record.p !== "verb" || candidate === token) return false;
+      return PAST_IRREGULAR.has(token) || endings.some((x) => token.endsWith(x));
+    };
 
     for (const c of HEARSAY) if (words.includes(c)) evidential = "to";
     for (const c of INFER) if (words.includes(c)) evidential = "mo";
     if (words.some((w) => PAST_CUES.has(w))) aspect = "ta";
     words.forEach((w, i) => {
       const nxt = words[i + 1];
-      if (["is", "am", "are", "was", "were"].includes(w) && nxt && nxt.endsWith("ing"))
-        aspect = "ka";
-      if (HAVE.has(w) && nxt && !COPULA.has(nxt) && (nxt.endsWith("ed") || T.irregular[nxt]))
+      const nextRecord = nxt ? resolved(nxt, true, true) : null;
+      if (["is", "am", "are", "was", "were"].includes(w) && nxt &&
+          nxt.endsWith("ing") && nextRecord && nextRecord.p === "verb") aspect = "ka";
+      if (HAVE.has(w) && nxt && !COPULA.has(nxt) && isInflectedVerb(nxt, ["ed"]))
         aspect = "ma";
-      if (w === "was" || w === "were" || (w.endsWith("ed") && lemma(w) !== w))
+      if (w === "was" || w === "were" || isInflectedVerb(w, ["ed"]))
         aspect = aspect || "ta";
       if (T.aspectWords[w]) aspect = T.aspectWords[w];
       if (NEG.has(w)) negate = true;
-      if (T.modals[w]) modal = T.modals[w];
-      if (OPINION.has(lemma(w))) opinion = true;
+      if (MODALS[w]) modal = MODALS[w];
+      if (lemmaCandidates(w).some((candidate) => OPINION.has(candidate))) opinion = true;
     });
     if (words[0] === "i" || words[0] === "we") firstPerson = true;
 
@@ -136,50 +293,84 @@
     let i = 0, possessor = null;
     while (i < words.length) {
       const w = words[i];
+      const nextRecord = i + 1 < words.length ? resolved(words[i + 1], true, true) : null;
+      const progressiveAux = COPULA.has(w) && i + 1 < words.length &&
+        words[i + 1].endsWith("ing") && nextRecord && nextRecord.p === "verb";
       if (DROP.has(w) || DO.has(w) || HAVE.has(w) || NEG.has(w) ||
           T.aspectWords[w] || COPULA.has(w)) {
-        if (COPULA.has(w) && !words.slice(i + 1).some((x) => x.endsWith("ing")))
-          out.push("es");
+        if (COPULA.has(w) && !progressiveAux) out.push("es");
         i++; continue;
       }
       if (w === "than") { out.push("an"); i++; continue; }
+
+      const phraseMatch = longestPhrase(words, i);
+      if (phraseMatch) {
+        let [record, span] = phraseMatch;
+        const [inflected, candidate] = knownRecord(w, true);
+        const previous = i ? words[i - 1] : null;
+        const verbalContext = (w.endsWith("ing") && COPULA.has(previous)) ||
+          w.endsWith("ed") || PAST_IRREGULAR.has(w);
+        if (span === 1 && verbalContext && candidate !== w && inflected && inflected.p === "verb")
+          record = inflected;
+        out.push(...record.f.split(" "));
+        if (possessor) { out.push("en", possessor); possessor = null; }
+        i += span; continue;
+      }
+
       const cmp = comparative(w);
       if (cmp) { out.push(...cmp); i++; continue; }
 
       let matched = false;
-      for (const span of [3, 2, 1]) {
+      for (let span = Math.min(4, words.length - i); span >= 1; span--) {
         const phrase = words.slice(i, i + span).join(" ");
-        if (!phrase) continue;
-        const tables = [
-          ["prep", T.prepositions], ["conn", T.connectives], ["deg", T.degree],
-          ["det", T.determiners], ["pron", T.pronouns], ["we", T.we],
-          ["modal", T.modals],
-        ];
+        const tables = [["prep", T.prepositions], ["conn", T.connectives],
+          ["deg", T.degree], ["det", T.determiners], ["pron", T.pronouns],
+          ["we", T.we], ["modal", MODALS]];
         for (const [name, table] of tables) {
           if (!(phrase in table)) continue;
           const val = table[phrase];
-          if (name === "we")
-            notes.push("English 'we' is ambiguous; Senel requires a choice. " +
-              "Used mon (we, NOT including you) — swap to mun to include them.");
+          if (name === "we") notes.push("English 'we' is ambiguous; Senel requires a choice. " +
+            "Used mon (we, NOT including you) — swap to mun to include them.");
           if (name === "modal") { matched = true; i += span; break; }
           if ((name === "pron" || name === "we") &&
               ["my", "your", "his", "her", "its", "their", "our", "ours"].includes(phrase)) {
             possessor = val; matched = true; i += span; break;
           }
-          out.push(val); matched = true; i += span; break;
+          out.push(...val.split(" ")); matched = true; i += span; break;
         }
         if (matched) break;
-        const key = phrase in D.english ? phrase :
-          (lemma(phrase) in D.english ? lemma(phrase) : null);
-        if (key) {
-          out.push(...D.english[key].split(" "));
-          if (possessor) { out.push("en", possessor); possessor = null; }
-          matched = true; i += span; break;
-        }
       }
       if (matched) continue;
-      notes.push(`no Senel word for '${w}' yet — left as [${w}]`);
-      out.push(`[${w}]`);
+
+      const overrideKey = overrides[w] ? normaliseAliasPhrase(overrides[w]) : "";
+      const overrideRecord = overrideKey ? CATALOG[overrideKey] : null;
+      if (overrideRecord) {
+        out.push(...overrideRecord.f.split(" "));
+        notes.push(`mapped '${w}' to '${overrideRecord.c}' by your explicit choice`);
+        if (possessor) { out.push("en", possessor); possessor = null; }
+        i++; continue;
+      }
+
+      const previous = i ? words[i - 1] : null;
+      const preferInflected = (w.endsWith("ing") && COPULA.has(previous)) ||
+        w.endsWith("ed") || PAST_IRREGULAR.has(w);
+      const [record] = resolveWord(w, true, preferInflected);
+      if (record) {
+        out.push(...record.f.split(" "));
+        if (record.s.startsWith("productive"))
+          notes.push(`built '${w}' productively as ${record.f} (${record.s.replace("productive-", "")})`);
+        if (possessor) { out.push("en", possessor); possessor = null; }
+        i++; continue;
+      }
+
+      if (strict) {
+        notes.push(`no Senel concept for '${w}' — left explicitly as [${w}]`);
+        out.push(`[${w}]`);
+      } else {
+        notes.push(`no established Senel concept for '${w}' — preserved as a quoted ` +
+          "foreign term rather than assigned a false meaning");
+        out.push(`«${w}»`);
+      }
       i++;
     }
     if (possessor) out.push("en", possessor);
@@ -210,10 +401,8 @@
       tokens.push(evidential);
     }
     const s = tokens.join(" ");
-    return {
-      text: s.charAt(0).toUpperCase() + s.slice(1) + (isQuestion || leadWh ? "?" : "."),
-      notes: [...new Set(notes)],
-    };
+    return { text: s.charAt(0).toUpperCase() + s.slice(1) +
+      (isQuestion || leadWh ? "?" : "."), notes: [...new Set(notes)] };
   }
 
   /* --------------------------- Senel -> English --------------------------- */
@@ -244,7 +433,13 @@
     const notes = [], recs = [];
     let evidential = "", question = false, imperative = false, tag = "";
 
-    for (const tok of text.match(/[A-Za-z]+/g) || []) {
+    for (const tok of text.match(/«[^»]*»|\[[^\]]*\]|[A-Za-z]+/g) || []) {
+      if (tok.startsWith("«") || tok.startsWith("[")) {
+        const foreign = tok.slice(1, -1);
+        recs.push({ kind: "foreign", text: foreign });
+        if (tok.startsWith("[")) notes.push(`'${foreign}' was explicitly left untranslated`);
+        continue;
+      }
       const low = tok.toLowerCase();
       const entry = LEX.get(low);
       const cls = entry ? entry.c : null;
@@ -270,6 +465,16 @@
         continue;
       }
       if (cls === "PRON") { recs.push({ kind: "pron", form: low }); continue; }
+      if (X.modalRootsEn[low]) {
+        recs.push({ kind: "modal", text: X.modalRootsEn[low] });
+        continue;
+      }
+      if (PREFERRED[low]) {
+        const record = PREFERRED[low];
+        recs.push({ kind: "root", form: low, pos: record.pos || record.p,
+          text: record.text });
+        continue;
+      }
       const a = analyse(low);
       if (!a || a.kind === "UNKNOWN") {
         notes.push(`'${tok}' is not a Senel word`);
@@ -326,6 +531,7 @@
     let subject = null, predicateDone = false;
     const negated = recs.some((r) => r.kind === "neg");
     const aspect = (recs.find((r) => r.kind === "asp") || {}).asp || null;
+    const modal = (recs.find((r) => r.kind === "modal") || {}).text || null;
 
     for (const item of grouped) {
       if (typeof item === "string") {
@@ -334,7 +540,7 @@
         continue;
       }
       const k = item.kind;
-      if (k === "asp" || k === "neg") continue;
+      if (k === "asp" || k === "neg" || k === "modal") continue;
       if (k === "pron") {
         const form = T.pronEn[item.form];
         const afterLet = words.length && words[words.length - 1] === "let";
@@ -355,6 +561,12 @@
           (typeof subject === "string" && !(subject in T.pronEn) && !plural);
         const be = subject === "min" ? "am"
           : plural || subject === "sin" || subject === "sun" ? "are" : "is";
+        if (modal) {
+          const modalPhrase = modal + (negated ? " not" : "");
+          words.push(item.pos === "property" ? `${modalPhrase} be ${verb}`
+            : `${modalPhrase} ${verb}`);
+          continue;
+        }
         if (item.pos === "property" && !Object.values(T.rootEn).includes(verb)) {
           words.push(negated ? `${be} not ${verb}` : `${be} ${verb}`);
           continue;
@@ -372,7 +584,7 @@
         else words.push(thirdSg ? third(verb) : verb);
         continue;
       }
-      if (subject === null && k === "derived") subject = item.text;
+      if (subject === null && (k === "derived" || k === "foreign")) subject = item.text;
       words.push(item.text);
     }
 
@@ -393,7 +605,9 @@
     }
 
   function breakdown(sentence) {
-    return (sentence.match(/[A-Za-z]+/g) || []).map((tok) => {
+    return (sentence.match(/«[^»]*»|\[[^\]]*\]|[A-Za-z]+/g) || []).map((tok) => {
+      if (tok.startsWith("«") || tok.startsWith("["))
+        return { token: tok, cls: "FOREIGN", gloss: "quoted foreign term" };
       const low = tok.toLowerCase();
       const entry = LEX.get(low);
       const a = analyse(low);
@@ -405,5 +619,9 @@
     });
   }
 
-  global.Senel = { en2sn, sn2en, breakdown, analyse, LEX, data: D };
+  const resolveEnglish = (phrase) => CATALOG[normaliseAliasPhrase(phrase)] || null;
+  const englishPhrases = Object.keys(CATALOG).sort();
+
+  global.Senel = { en2sn, sn2en, breakdown, analyse, resolveEnglish,
+    englishPhrases, LEX, data: D };
 })(window);

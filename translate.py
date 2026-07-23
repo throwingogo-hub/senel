@@ -14,12 +14,15 @@ it made one. Every guess appears as a note rather than being hidden.
 
 from __future__ import annotations
 
+import csv
 import json
 import re
 import sys
+from functools import lru_cache
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
+ALIASES_PATH = HERE / "english_aliases.tsv"
 sys.path.insert(0, str(HERE))
 import senel  # noqa: E402
 
@@ -146,7 +149,7 @@ ASPECT_WORDS = {
     "usually": "sa", "always": "sa", "often": "sa", "sometimes": "sa",
     "already": "ma",
 }
-MODALS = {"can": "pot", "could": "pot", "must": "gum", "should": "gum",
+MODALS = {"can": "gol", "could": "gol", "must": "gum", "should": "gum",
           "have to": "gum", "has to": "gum", "need to": "far",
           "may": "fus", "might": "fus", "would": None}
 
@@ -181,6 +184,15 @@ IRREGULAR_VERBS = {
     "lived": "live", "died": "die", "loved": "love", "liked": "like",
 }
 
+PAST_IRREGULAR_FORMS = {
+    "went", "gone", "came", "saw", "seen", "said", "told", "made", "took",
+    "taken", "gave", "given", "got", "gotten", "ate", "eaten", "drank",
+    "drunk", "slept", "knew", "known", "thought", "felt", "heard", "ran",
+    "wrote", "written", "read", "bought", "sold", "paid", "built", "broke",
+    "broken", "left", "met", "found", "lost", "began", "begun", "understood",
+    "wanted", "needed", "helped", "worked", "lived", "died", "loved", "liked",
+}
+
 WH = {"who": "ran nam", "where": "wan nam", "when": "yan nam",
       "what": "um nam", "why": "un nam", "how": "u nam",
       "how many": "ul nam", "how much": "ul nam", "whose": "en ran nam"}
@@ -192,18 +204,166 @@ OPINION_VERBS = {"think", "believe", "feel", "want", "need", "like", "love",
                  "hate", "hope", "intend", "prefer", "doubt", "guess"}
 
 
-def lemma(word: str) -> str:
+CONTRACTIONS = {
+    "won't": "will not", "can't": "can not", "cannot": "can not",
+    "shan't": "shall not", "ain't": "is not", "don't": "do not",
+    "doesn't": "does not", "didn't": "did not", "isn't": "is not",
+    "aren't": "are not", "wasn't": "was not", "weren't": "were not",
+    "haven't": "have not", "hasn't": "has not", "hadn't": "had not",
+    "wouldn't": "would not", "shouldn't": "should not",
+    "couldn't": "could not", "mustn't": "must not", "mightn't": "might not",
+    "i'm": "i am", "you're": "you are", "we're": "we are",
+    "they're": "they are", "he's": "he is", "she's": "she is",
+    "it's": "it is", "that's": "that is", "there's": "there is",
+    "i've": "i have", "you've": "you have", "we've": "we have",
+    "they've": "they have", "i'll": "i will", "you'll": "you will",
+    "he'll": "he will", "she'll": "she will", "we'll": "we will",
+    "they'll": "they will", "i'd": "i would", "you'd": "you would",
+    "he'd": "he would", "she'd": "she would", "we'd": "we would",
+    "they'd": "they would", "let's": "let us",
+}
+
+
+def normalise_english(text: str) -> list[str]:
+    """Expand common contractions and return deterministic lowercase tokens."""
+    value = text.replace("’", "'").replace("‘", "'").lower()
+    for contraction, expansion in sorted(CONTRACTIONS.items(), key=lambda kv: -len(kv[0])):
+        value = re.sub(rf"(?<![a-z]){re.escape(contraction)}(?![a-z])", expansion, value)
+    value = value.replace("-", " ")
+    return re.findall(r"[a-z]+|[0-9]+", value)
+
+
+def lemma_candidates(word: str) -> list[str]:
+    """Return plausible lemmas without accepting any until the dictionary does."""
+    candidates = [word]
+
+    def add(candidate):
+        if candidate and len(candidate) >= 2 and candidate not in candidates:
+            candidates.append(candidate)
+
     if word in IRREGULAR_VERBS:
-        return IRREGULAR_VERBS[word]
-    for suf, repl in (("ies", "y"), ("ing", ""), ("ed", ""), ("es", ""), ("s", "")):
-        if word.endswith(suf) and len(word) - len(suf) >= 3:
-            stem = word[: len(word) - len(suf)] + repl
-            return stem
-    return word
+        add(IRREGULAR_VERBS[word])
+    if word.endswith("ied") and len(word) > 4:
+        add(word[:-3] + "y")
+    if word.endswith("ies") and len(word) > 4:
+        add(word[:-3] + "y")
+    if word.endswith("ing") and len(word) > 5:
+        stem = word[:-3]
+        add(stem)
+        add(stem + "e")
+        if len(stem) > 3 and stem[-1] == stem[-2]:
+            add(stem[:-1])
+    if word.endswith("ed") and len(word) > 4:
+        stem = word[:-2]
+        add(stem)
+        add(stem + "e")
+        if len(stem) > 3 and stem[-1] == stem[-2]:
+            add(stem[:-1])
+    if word.endswith("es") and len(word) > 4:
+        add(word[:-2])
+        add(word[:-1])
+    if word.endswith("s") and not word.endswith("ss") and len(word) > 3:
+        add(word[:-1])
+    return candidates
+
+
+def lemma(word: str) -> str:
+    candidates = lemma_candidates(word)
+    return candidates[1] if len(candidates) > 1 else word
+
+
+def _normalise_phrase(phrase: str) -> str:
+    return " ".join(normalise_english(phrase))
+
+
+def _expression_pos(form: str, lex: dict) -> str:
+    first = form.split()[0]
+    entry = lex.get(first)
+    if entry:
+        return pos_of(first, entry["class"])
+    for prefix in ("na", "re", "se"):
+        if first.startswith(prefix) and first[len(prefix):] in lex:
+            base = first[len(prefix):]
+            return pos_of(base, lex[base]["class"])
+    for suffix in ("ra", "te", "wa", "ko", "pi", "mu", "di", "go", "la", "yi", "no"):
+        if first.endswith(suffix) and first[:-len(suffix)] in lex:
+            if suffix in ("pi", "di", "go"):
+                return "property"
+            if suffix in ("la", "yi"):
+                return "verb"
+            return "noun"
+    return "noun"
+
+
+def _validate_expression(form: str, lex: dict, affixes: dict):
+    for token in form.split():
+        if token in lex:
+            continue
+        _, kind = senel.analyse(token, lex, affixes)
+        if kind in ("UNKNOWN", "ILLEGAL"):
+            raise ValueError(f"invalid Senel expression {form!r}: {token!r} is unknown")
+
+
+@lru_cache(maxsize=1)
+def build_english_catalog():
+    """Generate the complete English phrase -> Senel concept catalogue."""
+    catalog = {}
+    lex, affixes = senel.build_index()
+
+    def add(phrase, form, pos, source, canonical=None):
+        phrase = _normalise_phrase(phrase)
+        if not phrase:
+            return
+        _validate_expression(form, lex, affixes)
+        record = {"form": form, "pos": pos, "source": source,
+                  "canonical": canonical or phrase}
+        previous = catalog.get(phrase)
+        if previous and previous["form"] != form:
+            if source == "lexicon":
+                return  # ambiguous gloss: preserve the semantic map's first entry
+            if source == "builtin" or (source == "aliases"
+                                        and previous["source"] != "aliases"):
+                catalog[phrase] = record  # curated English mappings are authoritative
+                return
+            raise ValueError(
+                f"English alias {phrase!r} maps to both {previous['form']!r} "
+                f"and {form!r}")
+        if not previous or source == "aliases":
+            catalog[phrase] = record
+
+    for entry in senel.load_lexicon():
+        if entry["class"] not in ("ROOT", "NUM"):
+            continue
+        for phrase in entry["gloss"].split(", "):
+            phrase = re.sub(r"\s*\(.*?\)", "", phrase).strip().lower()
+            if phrase:
+                add(phrase, entry["form"], pos_of(entry["form"], entry["class"]),
+                    "lexicon", phrase)
+
+    for phrase, form in SUPPLEMENT.items():
+        add(phrase, form, _expression_pos(form, lex), "builtin", phrase)
+
+    with ALIASES_PATH.open(newline="", encoding="utf-8") as handle:
+        rows = csv.reader(handle, delimiter="\t")
+        for line_no, row in enumerate(rows, 1):
+            if not row or row[0].startswith("#"):
+                continue
+            if len(row) != 4:
+                raise ValueError(f"{ALIASES_PATH.name}:{line_no}: expected 4 columns")
+            canonical, pos, form, aliases = (item.strip() for item in row)
+            for phrase in [canonical] + [x.strip() for x in aliases.split("|") if x.strip()]:
+                add(phrase, form, pos, "aliases", canonical)
+    return catalog
 
 
 def build_english_index():
-    """English phrase -> Senel form, taken from the lexicon's own glosses."""
+    """Complete English view used by the Python translator."""
+    return {phrase: record["form"]
+            for phrase, record in build_english_catalog().items()}
+
+
+def build_base_english_index():
+    """Stable base table kept in data.js; aliases live in the smaller aliases.js."""
     index = {}
     for entry in senel.load_lexicon():
         if entry["class"] not in ("ROOT", "NUM"):
@@ -216,14 +376,136 @@ def build_english_index():
     return index
 
 
+@lru_cache(maxsize=1)
+def build_preferred_english():
+    """Derived/compound Senel expression -> curated English canonical gloss.
+
+    Primitive roots retain the semantic map's own gloss and part of speech. This
+    prevents an English alias such as noun ``class`` from changing root ``mis``
+    (study) into a noun during Senel -> English translation.
+    """
+    lex, _ = senel.build_index()
+    preferred = {}
+    for record in build_english_catalog().values():
+        form = record["form"]
+        if record["source"] != "aliases" or " " in form or form in lex:
+            continue
+        preferred.setdefault(form, {
+            "text": record["canonical"], "pos": record["pos"]})
+    return preferred
+
+
+class PhraseTrie:
+    END = ""
+
+    def __init__(self, catalog):
+        self.root = {}
+        for phrase, record in catalog.items():
+            node = self.root
+            for token in phrase.split():
+                node = node.setdefault(token, {})
+            node[self.END] = record
+
+    def longest(self, words, start):
+        node, best = self.root, None
+        for end in range(start, len(words)):
+            node = node.get(words[end])
+            if node is None:
+                break
+            if self.END in node:
+                best = node[self.END], end - start + 1
+        return best
+
+
+def _known_record(word: str, catalog: dict, prefer_inflected=False):
+    candidates = lemma_candidates(word)
+    if prefer_inflected and (word.endswith("ing") or word.endswith("ed")
+                              or word in IRREGULAR_VERBS):
+        for candidate in candidates[1:]:
+            record = catalog.get(candidate)
+            if record and record["pos"] == "verb":
+                return record, candidate
+    for candidate in candidates:
+        record = catalog.get(candidate)
+        if record:
+            return record, candidate
+    return None, None
+
+
+def _productive_record(word: str, catalog: dict):
+    """Resolve transparent English derivations and compounds using Senel's own rules."""
+    # English derivational prefixes map directly onto Senel's bound prefixes.
+    for english, senel_prefix in (("self", "se"), ("auto", "se"),
+                                  ("non", "na"), ("un", "na"),
+                                  ("in", "na"), ("im", "na"),
+                                  ("ir", "na"), ("il", "na"),
+                                  ("re", "re")):
+        if word.startswith(english) and len(word) - len(english) >= 3:
+            base, _ = _known_record(
+                word[len(english):], catalog, prefer_inflected=True)
+            if base and " " not in base["form"]:
+                return {"form": senel_prefix + base["form"], "pos": base["pos"],
+                        "source": "productive-prefix", "canonical": word}
+
+    suffixes = (("ness", "mu", "noun"), ("ity", "mu", "noun"),
+                ("ment", "ko", "noun"), ("tion", "ko", "noun"),
+                ("er", "ra", "noun"), ("or", "ra", "noun"),
+                ("ist", "ra", "noun"), ("ful", "pi", "property"),
+                ("less", "pi", "property"), ("able", "pi", "property"),
+                ("ible", "pi", "property"))
+    for suffix, senel_suffix, pos in suffixes:
+        if not word.endswith(suffix) or len(word) - len(suffix) < 3:
+            continue
+        stem = word[:-len(suffix)]
+        stems = [stem]
+        if stem.endswith("i"):
+            stems.append(stem[:-1] + "y")
+        if len(stem) > 3 and stem[-1] == stem[-2]:
+            stems.append(stem[:-1])
+        for candidate in stems:
+            base, _ = _known_record(candidate, catalog)
+            if base and " " not in base["form"]:
+                form = base["form"] + senel_suffix
+                if suffix == "less":
+                    form = "na" + base["form"]
+                return {"form": form, "pos": pos, "source": "productive-suffix",
+                        "canonical": word}
+
+    # Closed compounds are accepted only when both halves are independently known
+    # content concepts; this avoids guessing from arbitrary substrings.
+    for split in range(3, len(word) - 2):
+        left, _ = _known_record(word[:split], catalog)
+        right, _ = _known_record(word[split:], catalog)
+        if not left or not right:
+            continue
+        if " " in left["form"] or " " in right["form"]:
+            continue
+        if left["pos"] == "gram" or right["pos"] == "gram":
+            continue
+        return {"form": left["form"] + right["form"], "pos": right["pos"],
+                "source": "productive-compound", "canonical": word}
+    return None
+
+
+def resolve_english_word(word: str, catalog: dict, productive=True,
+                         prefer_inflected=False):
+    record, candidate = _known_record(word, catalog, prefer_inflected=prefer_inflected)
+    if record:
+        return record, candidate
+    if productive:
+        return _productive_record(word, catalog), word
+    return None, None
+
+
 # ------------------------------------------------------------ English -> Senel --
 
-def en2sn(text: str):
-    index = build_english_index()
+def en2sn(text: str, strict=False):
+    catalog = build_english_catalog()
+    trie = PhraseTrie(catalog)
     notes, out = [], []
     raw = text.strip()
     is_question = raw.endswith("?")
-    words = re.findall(r"[a-z']+", raw.lower().replace("n't", " not"))
+    words = normalise_english(raw)
     if not words:
         return "", notes
 
@@ -234,6 +516,19 @@ def en2sn(text: str):
     lead_wh = None
     subject_first_person = False
     has_opinion_verb = False
+
+    def resolved(token, productive=False, prefer_inflected=False):
+        record, _ = resolve_english_word(
+            token, catalog, productive=productive,
+            prefer_inflected=prefer_inflected)
+        return record
+
+    def is_inflected_verb(token, endings=()):
+        record, candidate = resolve_english_word(
+            token, catalog, productive=False, prefer_inflected=True)
+        if not record or record["pos"] != "verb" or candidate == token:
+            return False
+        return token in PAST_IRREGULAR_FORMS or any(token.endswith(x) for x in endings)
 
     # ---- scan for grammatical signals before translating anything
     joined = " ".join(words)
@@ -246,14 +541,17 @@ def en2sn(text: str):
     if any(w in PAST_CUES for w in words):
         aspect = "ta"
     for i, w in enumerate(words):
-        if w in ("is", "am", "are", "was", "were") and i + 1 < len(words) \
-                and words[i + 1].endswith("ing"):
+        nxt = words[i + 1] if i + 1 < len(words) else None
+        next_record = (resolved(nxt, productive=True, prefer_inflected=True)
+                       if nxt else None)
+        if w in ("is", "am", "are", "was", "were") and nxt \
+                and nxt.endswith("ing") and next_record \
+                and next_record["pos"] == "verb":
             aspect = "ka"
-        if w in HAVE and i + 1 < len(words) and words[i + 1] not in COPULA:
-            nxt = words[i + 1]
-            if nxt.endswith("ed") or nxt in IRREGULAR_VERBS:
-                aspect = "ma"
-        if w in ("was", "were") or (w.endswith("ed") and lemma(w) != w):
+        if w in HAVE and nxt and nxt not in COPULA \
+                and is_inflected_verb(nxt, ("ed",)):
+            aspect = "ma"
+        if w in ("was", "were") or is_inflected_verb(w, ("ed",)):
             aspect = aspect or "ta"
         if w in ASPECT_WORDS:
             aspect = ASPECT_WORDS[w]
@@ -261,7 +559,7 @@ def en2sn(text: str):
             negate = True
         if w in MODALS and MODALS[w]:
             modal = MODALS[w]
-        if lemma(w) in OPINION_VERBS:
+        if any(candidate in OPINION_VERBS for candidate in lemma_candidates(w)):
             has_opinion_verb = True
 
     if words[0] in ("i", "we"):
@@ -277,11 +575,18 @@ def en2sn(text: str):
     pending_possessor = None
     while i < len(words):
         w = words[i]
+        next_record = (resolved(words[i + 1], productive=True,
+                                prefer_inflected=True)
+                       if i + 1 < len(words) else None)
+        progressive_aux = (w in COPULA and i + 1 < len(words)
+                           and words[i + 1].endswith("ing") and next_record
+                           and next_record["pos"] == "verb")
+
         # Auxiliaries, articles and negators are consumed by the grammar above and
         # must never reach the dictionary — English "do" is not Senel gan.
         if w in DROP or w in DO_SUPPORT or w in HAVE or w in NEGATORS \
                 or w in ASPECT_WORDS or w in COPULA:
-            if w in COPULA and not any(x.endswith("ing") for x in words[i + 1:]):
+            if w in COPULA and not progressive_aux:
                 out.append("es")
             i += 1
             continue
@@ -289,70 +594,95 @@ def en2sn(text: str):
             out.append("an")
             i += 1
             continue
-        cmp_form = _comparative(w, index)
+        # The concept trie is checked before comparison and single-word grammar
+        # tables, so nouns ending in -er (worker, teacher) are not misread as
+        # comparatives and an idiom such as "for sure" outranks "for".
+        # such as "for sure" outranks the shorter preposition "for".
+        phrase_match = trie.longest(words, i)
+        if phrase_match:
+            record, span = phrase_match
+            inflected, candidate = _known_record(w, catalog, prefer_inflected=True)
+            previous = words[i - 1] if i else None
+            verbal_context = ((w.endswith("ing") and previous in COPULA)
+                              or w.endswith("ed")
+                              or w in PAST_IRREGULAR_FORMS)
+            if span == 1 and verbal_context and candidate != w \
+                    and inflected and inflected["pos"] == "verb":
+                record = inflected
+            out += record["form"].split()
+            if pending_possessor:
+                out += ["en", pending_possessor]
+                pending_possessor = None
+            i += span
+            continue
+
+        cmp_form = _comparative(w, catalog)
         if cmp_form:
             out += cmp_form
             i += 1
             continue
+
         matched = False
-        for span in (3, 2, 1):
+        for span in range(min(4, len(words) - i), 0, -1):
             phrase = " ".join(words[i: i + span])
-            if not phrase:
-                continue
             for table in (PREPOSITIONS, CONNECTIVES, DEGREE, DETERMINERS,
                           PRONOUNS, WE, MODALS):
-                if phrase in table:
-                    val = table[phrase]
-                    if table is WE:
-                        notes.append(
-                            "English 'we' is ambiguous; Senel requires a choice. "
-                            "Used mon (we, NOT including you) — swap to mun to include them.")
-                    if table is MODALS and val is None:
-                        matched = True
-                        i += span
-                        break
-                    if table is PRONOUNS and phrase in ("my", "your", "his",
-                                                        "her", "its", "their"):
-                        pending_possessor = val
-                        matched = True
-                        i += span
-                        break
-                    if table is WE and phrase in ("our", "ours"):
-                        pending_possessor = val
-                        matched = True
-                        i += span
-                        break
-                    if table is MODALS:
-                        matched = True
-                        i += span
-                        break
-                    out.append(val)
+                if phrase not in table:
+                    continue
+                val = table[phrase]
+                if table is WE:
+                    notes.append(
+                        "English 'we' is ambiguous; Senel requires a choice. "
+                        "Used mon (we, NOT including you) — swap to mun to include them.")
+                if table is MODALS:
                     matched = True
                     i += span
                     break
+                if table is PRONOUNS and phrase in ("my", "your", "his",
+                                                    "her", "its", "their"):
+                    pending_possessor = val
+                    matched = True
+                    i += span
+                    break
+                if table is WE and phrase in ("our", "ours"):
+                    pending_possessor = val
+                    matched = True
+                    i += span
+                    break
+                out += val.split()
+                matched = True
+                i += span
+                break
             if matched:
-                break
-            if phrase in index:
-                out.append(index[phrase])
-                if pending_possessor:
-                    out += ["en", pending_possessor]
-                    pending_possessor = None
-                matched = True
-                i += span
-                break
-            base = lemma(phrase)
-            if base in index:
-                out.append(index[base])
-                if pending_possessor:
-                    out += ["en", pending_possessor]
-                    pending_possessor = None
-                matched = True
-                i += span
                 break
         if matched:
             continue
-        notes.append(f"no Senel word for '{w}' yet — left as [{w}]")
-        out.append(f"[{w}]")
+
+        previous = words[i - 1] if i else None
+        prefer_inflected = ((w.endswith("ing") and previous in COPULA)
+                            or w.endswith("ed") or w in PAST_IRREGULAR_FORMS)
+        record, candidate = resolve_english_word(
+            w, catalog, productive=True, prefer_inflected=prefer_inflected)
+        if record:
+            out += record["form"].split()
+            if record["source"].startswith("productive"):
+                notes.append(
+                    f"built '{w}' productively as {record['form']} "
+                    f"({record['source'].removeprefix('productive-')})")
+            if pending_possessor:
+                out += ["en", pending_possessor]
+                pending_possessor = None
+            i += 1
+            continue
+
+        if strict:
+            notes.append(f"no Senel concept for '{w}' — left explicitly as [{w}]")
+            out.append(f"[{w}]")
+        else:
+            notes.append(
+                f"no established Senel concept for '{w}' — preserved as a quoted "
+                "foreign term rather than assigned a false meaning")
+            out.append(f"«{w}»")
         i += 1
 
     if pending_possessor:
@@ -398,7 +728,7 @@ IRREGULAR_COMPARATIVE = {
 }
 
 
-def _comparative(word: str, index):
+def _comparative(word: str, catalog):
     """bigger -> ['mi','ur'] ; biggest -> ['ti','ur']. Returns None if not one."""
     if word in IRREGULAR_COMPARATIVE:
         return list(IRREGULAR_COMPARATIVE[word])
@@ -408,8 +738,9 @@ def _comparative(word: str, index):
         stem = word[: len(word) - len(suffix)]
         for candidate in (stem, stem + "e", stem[:-1] if len(stem) > 3
                           and stem[-1] == stem[-2] else stem):
-            if candidate in index:
-                form = index[candidate]
+            record = catalog.get(candidate)
+            if record and record["pos"] == "property":
+                form = record["form"]
                 # big -> urgo, but "bigger" is better said "more size" than
                 # "more large-size", so peel a size suffix back off.
                 if form.endswith(("go", "di")) and len(form) > 4:
@@ -419,12 +750,22 @@ def _comparative(word: str, index):
 
 
 def _verb_slot(tokens):
-    """Index of the first token that behaves like the main verb."""
+    """Index of the first verbal/property predicate, never merely the first root."""
     lex, _ = senel.build_index()
     for idx, tok in enumerate(tokens):
         entry = lex.get(tok)
-        if entry and entry["class"] == "ROOT":
+        if entry and pos_of(tok, entry["class"]) in ("verb", "property"):
             return idx
+        for prefix in ("na", "re", "se"):
+            base = tok[len(prefix):] if tok.startswith(prefix) else ""
+            if base in lex and pos_of(base, lex[base]["class"]) in ("verb", "property"):
+                return idx
+        for suffix, derived_pos in (("la", "verb"), ("yi", "verb"),
+                                    ("pi", "property"), ("di", "property"),
+                                    ("go", "property")):
+            if tok.endswith(suffix) and tok[:-len(suffix)] in lex \
+                    and derived_pos in ("verb", "property"):
+                return idx
     return len(tokens)
 
 
@@ -442,6 +783,7 @@ PRON_EN = {"min": ("I", "me"), "sin": ("you", "you"), "tin": ("it", "it"),
            "pan": ("one", "one"), "sel": ("oneself", "oneself"),
            "tal": ("each other", "each other")}
 ROOT_EN = {"em": "exist", "es": "is", "gan": "do"}
+MODAL_ROOTS_EN = {"gol": "can", "gum": "must", "fus": "may", "far": "need to"}
 IRREGULAR_PAST = {"go": "went", "come": "came", "see": "saw", "say": "said",
                   "tell": "told", "make": "made", "do": "did", "take": "took",
                   "give": "gave", "get": "got", "eat": "ate", "drink": "drank",
@@ -506,11 +848,18 @@ _ing, _past, _third = _head(_ing), _head(_past), _head(_third)
 
 def sn2en(text: str):
     lex, affixes = senel.build_index()
+    preferred = build_preferred_english()
     notes = []
     recs = []
     evidential, question, imperative, tag = "", False, False, ""
 
-    for tok in re.findall(r"[A-Za-z]+", text):
+    for tok in re.findall(r"«[^»]*»|\[[^\]]*\]|[A-Za-z]+", text):
+        if tok.startswith("«") or tok.startswith("["):
+            foreign = tok[1:-1]
+            recs.append({"kind": "foreign", "text": foreign})
+            if tok.startswith("["):
+                notes.append(f"'{foreign}' was explicitly left untranslated")
+            continue
         low = tok.lower()
         entry = lex.get(low)
         cls = entry["class"] if entry else None
@@ -548,6 +897,14 @@ def sn2en(text: str):
             continue
         if cls == "PRON":
             recs.append({"kind": "pron", "form": low})
+            continue
+        if low in MODAL_ROOTS_EN:
+            recs.append({"kind": "modal", "text": MODAL_ROOTS_EN[low]})
+            continue
+        if low in preferred:
+            record = preferred[low]
+            recs.append({"kind": "root", "form": low, "pos": record["pos"],
+                         "text": record["text"]})
             continue
         gloss, kind = senel.analyse(low, lex, affixes)
         if kind in ("UNKNOWN", "ILLEGAL"):
@@ -610,6 +967,8 @@ def sn2en(text: str):
     negated = any(r["kind"] == "neg" for r in recs if isinstance(r, dict))
     aspect = next((r["asp"] for r in recs if isinstance(r, dict)
                    and r["kind"] == "asp"), None)
+    modal = next((r["text"] for r in recs if isinstance(r, dict)
+                  and r["kind"] == "modal"), None)
     for item in out:
         if isinstance(item, str):
             if subject is None:
@@ -617,7 +976,7 @@ def sn2en(text: str):
             words.append(item)
             continue
         k = item["kind"]
-        if k in ("asp", "neg"):
+        if k in ("asp", "neg", "modal"):
             continue
         if k == "pron":
             form = PRON_EN[item["form"]]
@@ -645,6 +1004,11 @@ def sn2en(text: str):
                                             and not plural)
             be = "am" if subject == "min" else "are" if plural or subject == "sin" \
                 else "is"
+            if modal:
+                modal_phrase = modal + (" not" if negated else "")
+                words.append(f"{modal_phrase} be {verb}" if item["pos"] == "property"
+                             else f"{modal_phrase} {verb}")
+                continue
             if item["pos"] == "property" and verb not in ROOT_EN.values():
                 words.append(f"{be} {verb}" if not negated else f"{be} not {verb}")
                 continue
@@ -671,7 +1035,7 @@ def sn2en(text: str):
             else:
                 words.append(_third(verb) if third_sg else verb)
             continue
-        if subject is None and k == "derived":
+        if subject is None and k in ("derived", "foreign"):
             subject = item["text"]
         words.append(item["text"])
 
@@ -698,12 +1062,13 @@ def export_data(target: Path):
                 "d": e["source"]} for e in senel.load_lexicon()]
     payload = {
         "lexicon": entries,
-        "english": build_english_index(),
+        "english": build_base_english_index(),
         "tables": {
             "pronouns": PRONOUNS, "we": WE, "determiners": DETERMINERS,
             "prepositions": PREPOSITIONS, "connectives": CONNECTIVES,
             "degree": DEGREE, "aspectWords": ASPECT_WORDS,
-            "modals": {k: v for k, v in MODALS.items() if v},
+            "modals": {**{k: v for k, v in MODALS.items() if v},
+                       "can": "pot", "could": "pot"},
             "irregular": IRREGULAR_VERBS, "wh": WH,
             "copula": sorted(COPULA), "have": sorted(HAVE),
             "doSupport": sorted(DO_SUPPORT), "negators": sorted(NEGATORS),
@@ -726,6 +1091,24 @@ def export_data(target: Path):
           f"{len(entries)} entries, {len(payload['english'])} English keys)")
 
 
+def export_aliases(target: Path):
+    payload = {
+        "raw": ALIASES_PATH.read_text(encoding="utf-8"),
+        "contractions": CONTRACTIONS,
+        "pastIrregularForms": sorted(PAST_IRREGULAR_FORMS),
+        "modals": {k: v for k, v in MODALS.items() if v},
+        "modalRootsEn": MODAL_ROOTS_EN,
+    }
+    target.parent.mkdir(parents=True, exist_ok=True)
+    target.write_text("window.SENEL_ENGLISH = "
+                      + json.dumps(payload, ensure_ascii=False) + ";\n",
+                      encoding="utf-8")
+    alias_count = sum(1 for line in payload["raw"].splitlines()
+                      if line and not line.startswith("#"))
+    print(f"wrote {target} ({target.stat().st_size // 1024} KB, "
+          f"{alias_count} alias groups)")
+
+
 def main(argv):
     if len(argv) < 2:
         print(__doc__)
@@ -734,12 +1117,13 @@ def main(argv):
     if cmd == "data":
         export_data(HERE / "docs" / "data.js")
         return 0
-    text = " ".join(argv[2:])
+    strict = "--strict" in argv[2:]
+    text = " ".join(arg for arg in argv[2:] if arg != "--strict")
     fn = {"en2sn": en2sn, "sn2en": sn2en}.get(cmd)
     if not fn:
         print(f"unknown command {cmd!r}")
         return 1
-    result, notes = fn(text)
+    result, notes = fn(text, strict=True) if cmd == "en2sn" and strict else fn(text)
     print(result)
     for n in dict.fromkeys(notes):
         print(f"  note: {n}")

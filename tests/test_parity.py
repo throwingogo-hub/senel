@@ -36,6 +36,11 @@ def main():
         expected, _ = translate.en2sn(sentence)
         if js["en2sn"][sentence] != expected:
             mismatches.append((sentence, expected, js["en2sn"][sentence]))
+    for sentence in cases.get("enStrict", []):
+        expected, _ = translate.en2sn(sentence, strict=True)
+        if js["en2snStrict"][sentence] != expected:
+            mismatches.append((sentence + " [strict]", expected,
+                               js["en2snStrict"][sentence]))
     for sentence in cases["sn"]:
         expected, _ = translate.sn2en(sentence)
         if js["sn2en"][sentence] != expected:
@@ -46,7 +51,7 @@ def main():
         for src, py, node in mismatches:
             print(f"  {src!r}\n    python: {py!r}\n    js:     {node!r}")
         return 1
-    total = len(cases["en"]) + len(cases["sn"])
+    total = len(cases["en"]) + len(cases.get("enStrict", [])) + len(cases["sn"])
     print(f"PASS: {total} sentences translate identically in Python and JavaScript.")
     return 0
 

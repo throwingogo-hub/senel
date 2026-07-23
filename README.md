@@ -108,8 +108,14 @@ Til es mi ur an tir lo.     The dog is bigger than the cat.
 
 It is rule-based rather than statistical, which for this language is the right choice:
 Senel was designed to be unambiguous, so Senel → English is close to exact. English →
-Senel is the hard direction, because English omits things Senel requires — and rather
-than quietly guessing, the translator tells you what it had to decide:
+Senel is the hard direction. Its front end now expands contractions, tests several
+plausible lemmas instead of blindly stripping suffixes, performs longest-phrase matching,
+and builds transparent Senel derivations and compounds where possible. The catalogue
+contains more than 900 English expressions while the language itself remains the same
+557-root system.
+
+English also omits things Senel requires — and rather than quietly guessing, the
+translator tells you what it had to decide:
 
 > **English 'we' is ambiguous; Senel requires a choice.** Used `mon` (we, NOT including
 > you) — swap to `mun` to include them.
@@ -118,7 +124,11 @@ than quietly guessing, the translator tells you what it had to decide:
 > `mo` if inferred, `yo` if general knowledge, `so` if internal.
 
 Every translation also comes with a word-by-word breakdown showing which semantic domain
-each word came from, so the page teaches the system while it translates.
+each word came from, so the page teaches the system while it translates. A concept that
+is genuinely absent is preserved honestly as `«a quoted foreign term»`; strict mode uses
+`[untranslated]` instead. In the browser, each unresolved term also receives a concept
+resolver: the user may map it deliberately to any existing English–Senel concept and the
+sentence is reanalysed with that choice. Neither mode silently assigns an invented meaning.
 
 From the terminal:
 
@@ -128,6 +138,9 @@ python3 translate.py en2sn "I am going to your house."
 
 python3 translate.py sn2en "Til em i pin en sin lo."
 # The dog exists at the building of you.  [I saw it]
+
+python3 translate.py en2sn --strict "An unknownword remains."
+# [unknownword] bas lo.
 ```
 
 ## Try it in 30 seconds
@@ -141,6 +154,8 @@ python3 senel.py merge japanese          # which words collapse for a given L1's
 python3 build_lexicon.py                 # regenerate all 557 roots from the semantic map
 python3 translate.py en2sn "I don't know."
 python3 tests/test_examples.py           # every example in the docs must parse
+python3 tests/test_translation.py        # contractions, morphology and fallback regressions
+python3 tests/test_coverage.py           # representative everyday-English coverage gate
 python3 tests/test_parity.py             # the Python and browser translators must agree
 ```
 

@@ -29,6 +29,12 @@ jobs:
       - name: Every example in the docs must parse
         run: python3 tests/test_examples.py
 
+      - name: English normalisation and fallback regressions
+        run: python3 tests/test_translation.py
+
+      - name: Everyday English coverage must not regress
+        run: python3 tests/test_coverage.py
+
       - name: The web translator's data must be current
         run: |
           python3 translate.py data

@@ -12,10 +12,32 @@ real source — then run:
 python3 build_lexicon.py
 python3 senel.py validate
 python3 tests/test_examples.py
+python3 tests/test_translation.py
+python3 tests/test_coverage.py
+python3 tests/test_parity.py
 ```
 
 CI regenerates the lexicon and fails if the committed file differs, so a hand-edit will
 be caught.
+
+## Extending English translator coverage
+
+Do not add a Senel root merely because an English surface form is missing. First decide
+whether it is a synonym, inflection, idiom, transparent derivation, compound or genuinely
+new concept.
+
+- Add synonyms, idioms and canonical English renderings to
+  [`english_aliases.tsv`](english_aliases.tsv).
+- Never edit `docs/aliases.js` independently: its embedded TSV block must remain
+  byte-for-byte identical, and `tests/test_translation.py` enforces this.
+- Add representative sentences to `tests/coverage_corpus.txt`; the unknown-token rate
+  may not exceed 5%, and every generated Senel token must parse.
+- Add semantic edge cases to `tests/parity_cases.json`, so Python and JavaScript cannot
+  diverge on contractions, morphology, compounds or fallback behaviour.
+
+Unknown concepts must remain explicit: practical mode quotes them with `«…»`; strict mode
+uses `[…]`. Never map an unfamiliar word to an approximate concept merely to suppress a
+warning.
 
 ## Adding a root
 
