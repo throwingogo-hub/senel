@@ -1,0 +1,633 @@
+form	class	gloss	derivation
+a	ROLE	AGENT (subject; omitted in canonical order)	bare vowel = role
+e	ROLE	PATIENT (object; omitted in canonical order)	bare vowel = role
+o	ROLE	to, toward (recipient, goal)	bare vowel = role
+i	ROLE	at, in, on (place and time)	bare vowel = role
+u	ROLE	by, with (instrument, means)	bare vowel = role
+an	ROLE	from (source, origin)	oblique role series
+en	ROLE	of (possession, part, relation)	oblique role series
+in	ROLE	for (beneficiary)	oblique role series
+on	ROLE	with (accompaniment)	oblique role series
+un	ROLE	because of, for the sake of	oblique role series
+as	ROLE	TOPIC (as for X)	oblique role series
+ta	ASP	PERFECTIVE (completed)	-a class = aspect
+ka	ASP	PROGRESSIVE (ongoing)	-a class = aspect
+ma	ASP	PERFECT (resulting state)	-a class = aspect
+fa	ASP	PROSPECTIVE (about to)	-a class = aspect
+sa	ASP	HABITUAL (generic, repeated)	-a class = aspect
+ba	ASP	INCEPTIVE (begins to)	-a class = aspect
+lo	EVID	I perceived it directly	-o class = evidential
+to	EVID	I was told it	-o class = evidential
+so	EVID	my own state, intent or opinion	-o class = evidential
+mo	EVID	I infer it from evidence	-o class = evidential
+yo	EVID	established or common knowledge	-o class = evidential
+ne	MOOD	not	-e class = polarity and mood
+he	MOOD	POLAR QUESTION	-e class = polarity and mood
+we	MOOD	IMPERATIVE, request	-e class = polarity and mood
+pe	MOOD	HORTATIVE (let us, may it)	-e class = polarity and mood
+ge	MOOD	HYPOTHETICAL, counterfactual	-e class = polarity and mood
+de	MOOD	EMPHATIC assertion	-e class = polarity and mood
+ye	MOOD	TAG (…right?)	-e class = polarity and mood
+mi	DEG	more (comparative)	-i class = degree
+li	DEG	less	-i class = degree
+ti	DEG	most (superlative)	-i class = degree
+si	DEG	as, equally (equative)	-i class = degree
+ki	DEG	too, excessively	-i class = degree
+fi	DEG	enough, sufficiently	-i class = degree
+bi	DEG	very	-i class = degree
+nu	CONN	and	-u class = connective
+bu	CONN	or (inclusive: one or both)	-u class = connective
+pu	CONN	or (exclusive: exactly one)	-u class = connective
+wu	CONN	but, however	-u class = connective
+hu	CONN	if (marks the condition)	-u class = connective
+du	CONN	then, therefore (marks the result)	-u class = connective
+ku	CONN	because	-u class = connective
+ru	CONN	although	-u class = connective
+fu	CONN	that (complementiser)	-u class = connective
+gu	CONN	which, who (relativiser)	-u class = connective
+sam	DET	this, these (near)	C-am = determiner
+tam	DET	that, those (far)	C-am = determiner
+nam	DET	which, what (interrogative)	C-am = determiner
+kam	DET	some	C-am = determiner
+lam	DET	all, every, each	C-am = determiner
+pam	DET	many (also general plural)	C-am = determiner
+fam	DET	few, a little	C-am = determiner
+yam	DET	no, none, zero	C-am = determiner
+wam	DET	any	C-am = determiner
+min	PRON	I, me	pronoun set
+mun	PRON	we (including you)	pronoun set
+mon	PRON	we (excluding you)	pronoun set
+sin	PRON	you (one)	pronoun set
+sun	PRON	you (several)	pronoun set
+tin	PRON	he, she, they, it (one)	pronoun set
+tun	PRON	they (several)	pronoun set
+pan	PRON	one, people (generic)	pronoun set
+sel	PRON	self (reflexive)	pronoun set
+tal	PRON	each other; together	pronoun set
+na-	AFFIX	not, the opposite of	bound CV prefix
+re-	AFFIX	again, back	bound CV prefix
+se-	AFFIX	self-, auto-	bound CV prefix
+-ra	AFFIX	one who does it (agent)	bound CV suffix
+-te	AFFIX	tool for doing it	bound CV suffix
+-wa	AFFIX	place where it happens	bound CV suffix
+-ko	AFFIX	product or result of it	bound CV suffix
+-pi	AFFIX	pertaining to it (adjectival)	bound CV suffix
+-mu	AFFIX	the quality of it (abstract)	bound CV suffix
+-di	AFFIX	small, lesser	bound CV suffix
+-go	AFFIX	large, greater	bound CV suffix
+-la	AFFIX	cause it to happen (causative)	bound CV suffix
+-yi	AFFIX	undergo it (passive)	bound CV suffix
+-no	AFFIX	ordinal (Nth)	bound CV suffix
+al	NUM	1	zero=number, quantity and logic / a=digits 1-4
+ak	NUM	2	zero=number, quantity and logic / a=digits 1-4
+at	NUM	3	zero=number, quantity and logic / a=digits 1-4
+ap	NUM	4	zero=number, quantity and logic / a=digits 1-4
+os	NUM	5	zero=number, quantity and logic / o=digits 5-9 and 0
+ol	NUM	6	zero=number, quantity and logic / o=digits 5-9 and 0
+ok	NUM	7	zero=number, quantity and logic / o=digits 5-9 and 0
+ot	NUM	8	zero=number, quantity and logic / o=digits 5-9 and 0
+op	NUM	9	zero=number, quantity and logic / o=digits 5-9 and 0
+om	NUM	0	zero=number, quantity and logic / o=digits 5-9 and 0
+il	NUM	ten	zero=number, quantity and logic / i=powers of ten
+ik	NUM	hundred	zero=number, quantity and logic / i=powers of ten
+it	NUM	thousand	zero=number, quantity and logic / i=powers of ten
+ip	NUM	million	zero=number, quantity and logic / i=powers of ten
+el	ROOT	true	zero=number, quantity and logic / e=logic
+er	ROOT	false	zero=number, quantity and logic / e=logic
+es	ROOT	be, be the same as	zero=number, quantity and logic / e=logic
+ek	ROOT	other, different	zero=number, quantity and logic / e=logic
+et	ROOT	cause	zero=number, quantity and logic / e=logic
+ep	ROOT	result	zero=number, quantity and logic / e=logic
+em	ROOT	exist, there is	zero=number, quantity and logic / e=logic
+ul	ROOT	amount	zero=number, quantity and logic / u=measure
+ur	ROOT	size	zero=number, quantity and logic / u=measure
+us	ROOT	unit	zero=number, quantity and logic / u=measure
+uk	ROOT	part	zero=number, quantity and logic / u=measure
+ut	ROOT	whole	zero=number, quantity and logic / u=measure
+up	ROOT	degree	zero=number, quantity and logic / u=measure
+um	ROOT	thing, entity	zero=number, quantity and logic / u=measure
+pal	ROOT	water	p=matter and made things / a=natural substance
+par	ROOT	air	p=matter and made things / a=natural substance
+pas	ROOT	soil	p=matter and made things / a=natural substance
+pak	ROOT	stone	p=matter and made things / a=natural substance
+pat	ROOT	sand	p=matter and made things / a=natural substance
+pap	ROOT	liquid	p=matter and made things / a=natural substance
+pen	ROOT	tool	p=matter and made things / e=tools
+pel	ROOT	container	p=matter and made things / e=tools
+per	ROOT	machine	p=matter and made things / e=tools
+pes	ROOT	cloth	p=matter and made things / e=tools
+pek	ROOT	rope	p=matter and made things / e=tools
+pet	ROOT	blade	p=matter and made things / e=tools
+pep	ROOT	wheel	p=matter and made things / e=tools
+pin	ROOT	building	p=matter and made things / i=buildings
+pil	ROOT	room	p=matter and made things / i=buildings
+pir	ROOT	door	p=matter and made things / i=buildings
+pis	ROOT	window	p=matter and made things / i=buildings
+pik	ROOT	wall	p=matter and made things / i=buildings
+pit	ROOT	roof	p=matter and made things / i=buildings
+pip	ROOT	floor	p=matter and made things / i=buildings
+pon	ROOT	metal	p=matter and made things / o=worked material
+pol	ROOT	wood	p=matter and made things / o=worked material
+por	ROOT	glass	p=matter and made things / o=worked material
+pos	ROOT	paper	p=matter and made things / o=worked material
+pok	ROOT	made material	p=matter and made things / o=worked material
+pot	ROOT	clay	p=matter and made things / o=worked material
+pop	ROOT	fibre	p=matter and made things / o=worked material
+pun	ROOT	solid	p=matter and made things / u=states of matter
+pul	ROOT	fluid	p=matter and made things / u=states of matter
+pur	ROOT	gas	p=matter and made things / u=states of matter
+pus	ROOT	dust	p=matter and made things / u=states of matter
+puk	ROOT	lump	p=matter and made things / u=states of matter
+put	ROOT	surface	p=matter and made things / u=states of matter
+pup	ROOT	hole	p=matter and made things / u=states of matter
+tan	ROOT	plant	t=living kinds / a=plants
+tar	ROOT	tree	t=living kinds / a=plants
+tas	ROOT	grass	t=living kinds / a=plants
+tak	ROOT	leaf	t=living kinds / a=plants
+tat	ROOT	root	t=living kinds / a=plants
+tap	ROOT	flower	t=living kinds / a=plants
+ten	ROOT	animal	t=living kinds / e=animal classes
+tel	ROOT	bird	t=living kinds / e=animal classes
+ter	ROOT	fish	t=living kinds / e=animal classes
+tes	ROOT	insect	t=living kinds / e=animal classes
+tek	ROOT	mammal	t=living kinds / e=animal classes
+tet	ROOT	reptile	t=living kinds / e=animal classes
+tep	ROOT	worm	t=living kinds / e=animal classes
+til	ROOT	dog	t=living kinds / i=familiar animals
+tir	ROOT	cat	t=living kinds / i=familiar animals
+tis	ROOT	horse	t=living kinds / i=familiar animals
+tik	ROOT	fowl	t=living kinds / i=familiar animals
+tit	ROOT	cattle	t=living kinds / i=familiar animals
+tip	ROOT	sheep	t=living kinds / i=familiar animals
+ton	ROOT	fungus	t=living kinds / o=other life
+tol	ROOT	seed	t=living kinds / o=other life
+tor	ROOT	egg	t=living kinds / o=other life
+tos	ROOT	microbe	t=living kinds / o=other life
+tok	ROOT	cell	t=living kinds / o=other life
+tot	ROOT	species	t=living kinds / o=other life
+top	ROOT	breed	t=living kinds / o=other life
+tul	ROOT	fruit	t=living kinds / u=plant produce
+tur	ROOT	grain	t=living kinds / u=plant produce
+tus	ROOT	vegetable	t=living kinds / u=plant produce
+tuk	ROOT	timber	t=living kinds / u=plant produce
+tut	ROOT	bark	t=living kinds / u=plant produce
+tup	ROOT	sap	t=living kinds / u=plant produce
+kan	ROOT	body	k=parts and structure / a=outer body
+kal	ROOT	head	k=parts and structure / a=outer body
+kar	ROOT	face	k=parts and structure / a=outer body
+kas	ROOT	eye	k=parts and structure / a=outer body
+kak	ROOT	ear	k=parts and structure / a=outer body
+kat	ROOT	nose	k=parts and structure / a=outer body
+kap	ROOT	mouth	k=parts and structure / a=outer body
+ken	ROOT	heart	k=parts and structure / e=inner body
+kel	ROOT	blood	k=parts and structure / e=inner body
+ker	ROOT	bone	k=parts and structure / e=inner body
+kes	ROOT	brain	k=parts and structure / e=inner body
+kek	ROOT	lung	k=parts and structure / e=inner body
+ket	ROOT	stomach	k=parts and structure / e=inner body
+kep	ROOT	skin	k=parts and structure / e=inner body
+kin	ROOT	arm	k=parts and structure / i=limbs
+kil	ROOT	hand	k=parts and structure / i=limbs
+kir	ROOT	finger	k=parts and structure / i=limbs
+kis	ROOT	leg	k=parts and structure / i=limbs
+kik	ROOT	foot	k=parts and structure / i=limbs
+kit	ROOT	back	k=parts and structure / i=limbs
+kip	ROOT	shoulder	k=parts and structure / i=limbs
+kon	ROOT	part	k=parts and structure / o=generic parts
+kol	ROOT	piece	k=parts and structure / o=generic parts
+kor	ROOT	edge	k=parts and structure / o=generic parts
+kos	ROOT	centre	k=parts and structure / o=generic parts
+kok	ROOT	layer	k=parts and structure / o=generic parts
+kot	ROOT	joint	k=parts and structure / o=generic parts
+kop	ROOT	tip, end	k=parts and structure / o=generic parts
+kun	ROOT	structure	k=parts and structure / u=form
+kul	ROOT	frame	k=parts and structure / u=form
+kur	ROOT	line	k=parts and structure / u=form
+kus	ROOT	point	k=parts and structure / u=form
+kuk	ROOT	shape	k=parts and structure / u=form
+kut	ROOT	angle	k=parts and structure / u=form
+kup	ROOT	surface of	k=parts and structure / u=form
+ban	ROOT	move	b=motion and path / a=basic motion
+bal	ROOT	go	b=motion and path / a=basic motion
+bar	ROOT	come	b=motion and path / a=basic motion
+bas	ROOT	stop	b=motion and path / a=basic motion
+bak	ROOT	return	b=motion and path / a=basic motion
+bat	ROOT	follow	b=motion and path / a=basic motion
+bap	ROOT	lead	b=motion and path / a=basic motion
+ben	ROOT	walk	b=motion and path / e=manner of motion
+bel	ROOT	run	b=motion and path / e=manner of motion
+ber	ROOT	fly	b=motion and path / e=manner of motion
+bes	ROOT	swim	b=motion and path / e=manner of motion
+bek	ROOT	climb	b=motion and path / e=manner of motion
+bet	ROOT	fall	b=motion and path / e=manner of motion
+bep	ROOT	jump	b=motion and path / e=manner of motion
+bin	ROOT	carry	b=motion and path / i=caused motion
+bil	ROOT	push	b=motion and path / i=caused motion
+bir	ROOT	pull	b=motion and path / i=caused motion
+bis	ROOT	throw	b=motion and path / i=caused motion
+bik	ROOT	lift	b=motion and path / i=caused motion
+bit	ROOT	drop	b=motion and path / i=caused motion
+bip	ROOT	drag	b=motion and path / i=caused motion
+bon	ROOT	path	b=motion and path / o=direction
+bol	ROOT	forward	b=motion and path / o=direction
+bor	ROOT	backward	b=motion and path / o=direction
+bos	ROOT	up	b=motion and path / o=direction
+bok	ROOT	down	b=motion and path / o=direction
+bot	ROOT	across	b=motion and path / o=direction
+bop	ROOT	around	b=motion and path / o=direction
+bun	ROOT	enter	b=motion and path / u=arrival and departure
+bul	ROOT	exit	b=motion and path / u=arrival and departure
+bur	ROOT	arrive	b=motion and path / u=arrival and departure
+bus	ROOT	leave	b=motion and path / u=arrival and departure
+buk	ROOT	pass	b=motion and path / u=arrival and departure
+but	ROOT	meet	b=motion and path / u=arrival and departure
+bup	ROOT	cross	b=motion and path / u=arrival and departure
+dan	ROOT	give	d=transfer and holding / a=basic transfer
+dal	ROOT	take	d=transfer and holding / a=basic transfer
+dar	ROOT	have	d=transfer and holding / a=basic transfer
+das	ROOT	lack	d=transfer and holding / a=basic transfer
+dak	ROOT	keep	d=transfer and holding / a=basic transfer
+dat	ROOT	lose	d=transfer and holding / a=basic transfer
+dap	ROOT	find	d=transfer and holding / a=basic transfer
+den	ROOT	trade	d=transfer and holding / e=exchange
+del	ROOT	buy	d=transfer and holding / e=exchange
+der	ROOT	sell	d=transfer and holding / e=exchange
+des	ROOT	pay	d=transfer and holding / e=exchange
+dek	ROOT	price	d=transfer and holding / e=exchange
+det	ROOT	money	d=transfer and holding / e=exchange
+dep	ROOT	debt	d=transfer and holding / e=exchange
+din	ROOT	share	d=transfer and holding / i=sharing
+dil	ROOT	lend	d=transfer and holding / i=sharing
+dir	ROOT	borrow	d=transfer and holding / i=sharing
+dis	ROOT	steal	d=transfer and holding / i=sharing
+dik	ROOT	gift	d=transfer and holding / i=sharing
+dit	ROOT	receive	d=transfer and holding / i=sharing
+dip	ROOT	send	d=transfer and holding / i=sharing
+don	ROOT	owner	d=transfer and holding / o=possession
+dol	ROOT	property	d=transfer and holding / o=possession
+dor	ROOT	portion	d=transfer and holding / o=possession
+dos	ROOT	wealth	d=transfer and holding / o=possession
+dok	ROOT	poverty	d=transfer and holding / o=possession
+dot	ROOT	value	d=transfer and holding / o=possession
+dop	ROOT	cost	d=transfer and holding / o=possession
+dun	ROOT	transfer	d=transfer and holding / u=flow of goods
+dul	ROOT	exchange	d=transfer and holding / u=flow of goods
+dur	ROOT	supply	d=transfer and holding / u=flow of goods
+dus	ROOT	demand	d=transfer and holding / u=flow of goods
+duk	ROOT	store	d=transfer and holding / u=flow of goods
+dut	ROOT	waste	d=transfer and holding / u=flow of goods
+dup	ROOT	save	d=transfer and holding / u=flow of goods
+gan	ROOT	make, do	g=force and change / a=causing
+gal	ROOT	cause	g=force and change / a=causing
+gar	ROOT	become	g=force and change / a=causing
+gas	ROOT	change	g=force and change / a=causing
+gak	ROOT	begin	g=force and change / a=causing
+gat	ROOT	end	g=force and change / a=causing
+gap	ROOT	continue	g=force and change / a=causing
+gen	ROOT	build	g=force and change / e=build and break
+gel	ROOT	break	g=force and change / e=build and break
+ger	ROOT	repair	g=force and change / e=build and break
+ges	ROOT	destroy	g=force and change / e=build and break
+gek	ROOT	cut	g=force and change / e=build and break
+get	ROOT	join	g=force and change / e=build and break
+gep	ROOT	open	g=force and change / e=build and break
+gin	ROOT	hold	g=force and change / i=handling
+gil	ROOT	press	g=force and change / i=handling
+gir	ROOT	turn	g=force and change / i=handling
+gis	ROOT	bend	g=force and change / i=handling
+gik	ROOT	strike	g=force and change / i=handling
+git	ROOT	rub	g=force and change / i=handling
+gip	ROOT	tie	g=force and change / i=handling
+gon	ROOT	force	g=force and change / o=physical force
+gol	ROOT	power	g=force and change / o=physical force
+gor	ROOT	weight	g=force and change / o=physical force
+gos	ROOT	speed	g=force and change / o=physical force
+gok	ROOT	pressure	g=force and change / o=physical force
+got	ROOT	resistance	g=force and change / o=physical force
+gop	ROOT	balance	g=force and change / o=physical force
+gun	ROOT	work on	g=force and change / u=process
+gul	ROOT	use	g=force and change / u=process
+gur	ROOT	attempt	g=force and change / u=process
+gus	ROOT	succeed	g=force and change / u=process
+guk	ROOT	fail	g=force and change / u=process
+gut	ROOT	prepare	g=force and change / u=process
+gup	ROOT	complete	g=force and change / u=process
+gum	ROOT	must, be obliged to	g=force and change / u=process
+man	ROOT	think	m=mind / a=thinking
+mal	ROOT	know	m=mind / a=thinking
+mar	ROOT	believe	m=mind / a=thinking
+mas	ROOT	doubt	m=mind / a=thinking
+mak	ROOT	remember	m=mind / a=thinking
+mat	ROOT	forget	m=mind / a=thinking
+map	ROOT	understand	m=mind / a=thinking
+men	ROOT	reason	m=mind / e=reasoning
+mel	ROOT	judge	m=mind / e=reasoning
+mer	ROOT	compare	m=mind / e=reasoning
+mes	ROOT	decide	m=mind / e=reasoning
+mek	ROOT	plan	m=mind / e=reasoning
+met	ROOT	guess	m=mind / e=reasoning
+mep	ROOT	prove	m=mind / e=reasoning
+mil	ROOT	learn	m=mind / i=learning
+mir	ROOT	teach	m=mind / i=learning
+mis	ROOT	study	m=mind / i=learning
+mik	ROOT	skill	m=mind / i=learning
+mit	ROOT	idea	m=mind / i=learning
+mip	ROOT	problem	m=mind / i=learning
+mol	ROOT	attention	m=mind / o=mental states
+mor	ROOT	intention	m=mind / o=mental states
+mos	ROOT	memory	m=mind / o=mental states
+mok	ROOT	imagination	m=mind / o=mental states
+mot	ROOT	opinion	m=mind / o=mental states
+mop	ROOT	mind	m=mind / o=mental states
+mom	ROOT	conscience	m=mind / o=mental states
+mul	ROOT	fact	m=mind / u=truth status
+mur	ROOT	hypothesis	m=mind / u=truth status
+mus	ROOT	error	m=mind / u=truth status
+muk	ROOT	proof	m=mind / u=truth status
+mut	ROOT	meaning	m=mind / u=truth status
+mup	ROOT	sense	m=mind / u=truth status
+nan	ROOT	perceive	n=perception / a=perceiving
+nal	ROOT	see	n=perception / a=perceiving
+nar	ROOT	hear	n=perception / a=perceiving
+nas	ROOT	smell	n=perception / a=perceiving
+nak	ROOT	taste	n=perception / a=perceiving
+nat	ROOT	touch	n=perception / a=perceiving
+nap	ROOT	feel by body	n=perception / a=perceiving
+nen	ROOT	sight	n=perception / e=the senses
+nel	ROOT	sound	n=perception / e=the senses
+ner	ROOT	odour	n=perception / e=the senses
+nes	ROOT	flavour	n=perception / e=the senses
+nek	ROOT	texture	n=perception / e=the senses
+net	ROOT	sensation	n=perception / e=the senses
+nep	ROOT	sense faculty	n=perception / e=the senses
+nin	ROOT	colour	n=perception / i=visual quality
+nil	ROOT	bright	n=perception / i=visual quality
+nir	ROOT	dark	n=perception / i=visual quality
+nis	ROOT	clear	n=perception / i=visual quality
+nik	ROOT	pattern	n=perception / i=visual quality
+nit	ROOT	visible	n=perception / i=visual quality
+nip	ROOT	hidden	n=perception / i=visual quality
+non	ROOT	noise	n=perception / o=auditory quality
+nol	ROOT	loud	n=perception / o=auditory quality
+nor	ROOT	quiet	n=perception / o=auditory quality
+nos	ROOT	voice	n=perception / o=auditory quality
+nok	ROOT	tone	n=perception / o=auditory quality
+not	ROOT	silence	n=perception / o=auditory quality
+nop	ROOT	echo	n=perception / o=auditory quality
+nun	ROOT	pain	n=perception / u=bodily sensation
+nul	ROOT	pleasure	n=perception / u=bodily sensation
+nur	ROOT	hunger	n=perception / u=bodily sensation
+nus	ROOT	thirst	n=perception / u=bodily sensation
+nuk	ROOT	tiredness	n=perception / u=bodily sensation
+nut	ROOT	feeling warm	n=perception / u=bodily sensation
+nup	ROOT	feeling cold	n=perception / u=bodily sensation
+san	ROOT	say	s=speech and signs / a=speech acts
+sal	ROOT	ask	s=speech and signs / a=speech acts
+sar	ROOT	answer	s=speech and signs / a=speech acts
+sas	ROOT	tell	s=speech and signs / a=speech acts
+sak	ROOT	call, name	s=speech and signs / a=speech acts
+sat	ROOT	promise	s=speech and signs / a=speech acts
+sap	ROOT	deny	s=speech and signs / a=speech acts
+sen	ROOT	language	s=speech and signs / e=language units
+ser	ROOT	word	s=speech and signs / e=language units
+ses	ROOT	sentence	s=speech and signs / e=language units
+sek	ROOT	speech sound	s=speech and signs / e=language units
+set	ROOT	letter	s=speech and signs / e=language units
+sep	ROOT	text	s=speech and signs / e=language units
+sem	ROOT	book, document	s=speech and signs / e=language units
+sil	ROOT	talk with	s=speech and signs / i=communicating
+sir	ROOT	write	s=speech and signs / i=communicating
+sis	ROOT	read	s=speech and signs / i=communicating
+sik	ROOT	sign	s=speech and signs / i=communicating
+sit	ROOT	show	s=speech and signs / i=communicating
+sip	ROOT	conceal	s=speech and signs / i=communicating
+son	ROOT	story	s=speech and signs / o=discourse
+sol	ROOT	news	s=speech and signs / o=discourse
+sor	ROOT	question	s=speech and signs / o=discourse
+sos	ROOT	claim	s=speech and signs / o=discourse
+sok	ROOT	argument	s=speech and signs / o=discourse
+sot	ROOT	agreement	s=speech and signs / o=discourse
+sop	ROOT	command	s=speech and signs / o=discourse
+sul	ROOT	name	s=speech and signs / u=naming
+sur	ROOT	title	s=speech and signs / u=naming
+sus	ROOT	label	s=speech and signs / u=naming
+suk	ROOT	symbol	s=speech and signs / u=naming
+sut	ROOT	numeral	s=speech and signs / u=naming
+sup	ROOT	mark	s=speech and signs / u=naming
+fan	ROOT	feel emotion	f=feeling and value / a=wanting
+fal	ROOT	want	f=feeling and value / a=wanting
+far	ROOT	need	f=feeling and value / a=wanting
+fas	ROOT	like	f=feeling and value / a=wanting
+fak	ROOT	dislike	f=feeling and value / a=wanting
+fat	ROOT	love	f=feeling and value / a=wanting
+fap	ROOT	hate	f=feeling and value / a=wanting
+fen	ROOT	joy	f=feeling and value / e=emotions
+fel	ROOT	sadness	f=feeling and value / e=emotions
+fer	ROOT	fear	f=feeling and value / e=emotions
+fes	ROOT	anger	f=feeling and value / e=emotions
+fek	ROOT	surprise	f=feeling and value / e=emotions
+fet	ROOT	disgust	f=feeling and value / e=emotions
+fep	ROOT	calm	f=feeling and value / e=emotions
+fin	ROOT	good	f=feeling and value / i=evaluation
+fil	ROOT	bad	f=feeling and value / i=evaluation
+fir	ROOT	correct	f=feeling and value / i=evaluation
+fis	ROOT	wrong	f=feeling and value / i=evaluation
+fik	ROOT	important	f=feeling and value / i=evaluation
+fit	ROOT	useful	f=feeling and value / i=evaluation
+fip	ROOT	beautiful	f=feeling and value / i=evaluation
+fon	ROOT	trust	f=feeling and value / o=social feeling
+fol	ROOT	respect	f=feeling and value / o=social feeling
+for	ROOT	shame	f=feeling and value / o=social feeling
+fos	ROOT	pride	f=feeling and value / o=social feeling
+fok	ROOT	pity	f=feeling and value / o=social feeling
+fot	ROOT	envy	f=feeling and value / o=social feeling
+fop	ROOT	gratitude	f=feeling and value / o=social feeling
+fom	ROOT	dignity, worth	f=feeling and value / o=social feeling
+fun	ROOT	choose	f=feeling and value / u=will
+ful	ROOT	resolve	f=feeling and value / u=will
+fur	ROOT	refuse	f=feeling and value / u=will
+fus	ROOT	allow	f=feeling and value / u=will
+fuk	ROOT	forbid	f=feeling and value / u=will
+fut	ROOT	dare	f=feeling and value / u=will
+fup	ROOT	hesitate	f=feeling and value / u=will
+fum	ROOT	free, at liberty	f=feeling and value / u=will
+han	ROOT	live	h=life and the body's activity / a=life course
+hal	ROOT	die	h=life and the body's activity / a=life course
+har	ROOT	be born	h=life and the body's activity / a=life course
+has	ROOT	grow	h=life and the body's activity / a=life course
+hak	ROOT	age	h=life and the body's activity / a=life course
+hat	ROOT	heal	h=life and the body's activity / a=life course
+hap	ROOT	fall ill	h=life and the body's activity / a=life course
+hen	ROOT	eat	h=life and the body's activity / e=ingestion
+hel	ROOT	drink	h=life and the body's activity / e=ingestion
+her	ROOT	bite	h=life and the body's activity / e=ingestion
+hes	ROOT	swallow	h=life and the body's activity / e=ingestion
+hek	ROOT	chew	h=life and the body's activity / e=ingestion
+het	ROOT	breathe	h=life and the body's activity / e=ingestion
+hep	ROOT	cook	h=life and the body's activity / e=ingestion
+hem	ROOT	meal	h=life and the body's activity / e=ingestion
+hin	ROOT	sleep	h=life and the body's activity / i=rest and effort
+hil	ROOT	wake	h=life and the body's activity / i=rest and effort
+hir	ROOT	rest	h=life and the body's activity / i=rest and effort
+his	ROOT	labour	h=life and the body's activity / i=rest and effort
+hik	ROOT	play	h=life and the body's activity / i=rest and effort
+hit	ROOT	exercise	h=life and the body's activity / i=rest and effort
+hip	ROOT	dream	h=life and the body's activity / i=rest and effort
+hon	ROOT	health	h=life and the body's activity / o=health
+hol	ROOT	illness	h=life and the body's activity / o=health
+hor	ROOT	wound	h=life and the body's activity / o=health
+hos	ROOT	medicine	h=life and the body's activity / o=health
+hok	ROOT	birth	h=life and the body's activity / o=health
+hot	ROOT	death	h=life and the body's activity / o=health
+hop	ROOT	strength	h=life and the body's activity / o=health
+hun	ROOT	wash	h=life and the body's activity / u=care of the body
+hul	ROOT	clean	h=life and the body's activity / u=care of the body
+hur	ROOT	dirty	h=life and the body's activity / u=care of the body
+hus	ROOT	body waste	h=life and the body's activity / u=care of the body
+huk	ROOT	sweat	h=life and the body's activity / u=care of the body
+hut	ROOT	wear, dress	h=life and the body's activity / u=care of the body
+hup	ROOT	bathe	h=life and the body's activity / u=care of the body
+lan	ROOT	light	l=light, heat and weather / a=light
+lal	ROOT	darkness	l=light, heat and weather / a=light
+lar	ROOT	shine	l=light, heat and weather / a=light
+las	ROOT	shadow	l=light, heat and weather / a=light
+lak	ROOT	colour of light	l=light, heat and weather / a=light
+lat	ROOT	reflect	l=light, heat and weather / a=light
+lap	ROOT	glow	l=light, heat and weather / a=light
+len	ROOT	heat	l=light, heat and weather / e=heat
+lel	ROOT	cold	l=light, heat and weather / e=heat
+ler	ROOT	burn	l=light, heat and weather / e=heat
+les	ROOT	freeze	l=light, heat and weather / e=heat
+lek	ROOT	melt	l=light, heat and weather / e=heat
+let	ROOT	boil	l=light, heat and weather / e=heat
+lep	ROOT	warm	l=light, heat and weather / e=heat
+lin	ROOT	sun	l=light, heat and weather / i=sky
+lil	ROOT	moon	l=light, heat and weather / i=sky
+lir	ROOT	star	l=light, heat and weather / i=sky
+lis	ROOT	sky	l=light, heat and weather / i=sky
+lik	ROOT	cloud	l=light, heat and weather / i=sky
+lit	ROOT	world	l=light, heat and weather / i=sky
+lip	ROOT	outer space	l=light, heat and weather / i=sky
+lon	ROOT	weather	l=light, heat and weather / o=weather
+lol	ROOT	rain	l=light, heat and weather / o=weather
+lor	ROOT	wind	l=light, heat and weather / o=weather
+los	ROOT	snow	l=light, heat and weather / o=weather
+lok	ROOT	storm	l=light, heat and weather / o=weather
+lot	ROOT	fog	l=light, heat and weather / o=weather
+lop	ROOT	drought	l=light, heat and weather / o=weather
+lun	ROOT	energy	l=light, heat and weather / u=energy
+lul	ROOT	fire	l=light, heat and weather / u=energy
+lur	ROOT	electricity	l=light, heat and weather / u=energy
+lus	ROOT	wave	l=light, heat and weather / u=energy
+luk	ROOT	magnetism	l=light, heat and weather / u=energy
+lut	ROOT	gravity	l=light, heat and weather / u=energy
+lup	ROOT	radiation	l=light, heat and weather / u=energy
+ran	ROOT	person	r=people and society / a=persons
+ral	ROOT	people, group	r=people and society / a=persons
+rar	ROOT	family	r=people and society / a=persons
+ras	ROOT	friend	r=people and society / a=persons
+rak	ROOT	enemy	r=people and society / a=persons
+rat	ROOT	stranger	r=people and society / a=persons
+rap	ROOT	neighbour	r=people and society / a=persons
+ren	ROOT	parent	r=people and society / e=kin
+rel	ROOT	child	r=people and society / e=kin
+rer	ROOT	sibling	r=people and society / e=kin
+res	ROOT	spouse	r=people and society / e=kin
+rek	ROOT	grandparent	r=people and society / e=kin
+ret	ROOT	descendant	r=people and society / e=kin
+rep	ROOT	relative	r=people and society / e=kin
+rem	ROOT	female	r=people and society / e=kin
+rin	ROOT	leader	r=people and society / i=roles
+ril	ROOT	worker	r=people and society / i=roles
+rir	ROOT	student	r=people and society / i=roles
+ris	ROOT	teacher	r=people and society / i=roles
+rik	ROOT	healer	r=people and society / i=roles
+rit	ROOT	trader	r=people and society / i=roles
+rip	ROOT	guard	r=people and society / i=roles
+ron	ROOT	society	r=people and society / o=institutions
+rol	ROOT	law	r=people and society / o=institutions
+ror	ROOT	government	r=people and society / o=institutions
+ros	ROOT	school	r=people and society / o=institutions
+rok	ROOT	market	r=people and society / o=institutions
+rot	ROOT	court	r=people and society / o=institutions
+rop	ROOT	army	r=people and society / o=institutions
+rom	ROOT	male	r=people and society / o=institutions
+run	ROOT	help	r=people and society / u=social action
+rul	ROOT	harm	r=people and society / u=social action
+rur	ROOT	join with	r=people and society / u=social action
+rus	ROOT	cooperate	r=people and society / u=social action
+ruk	ROOT	compete	r=people and society / u=social action
+rut	ROOT	obey	r=people and society / u=social action
+rup	ROOT	command	r=people and society / u=social action
+rum	ROOT	right, entitlement	r=people and society / u=social action
+wan	ROOT	place	w=place and space / a=places
+wal	ROOT	area	w=place and space / a=places
+war	ROOT	position	w=place and space / a=places
+was	ROOT	region	w=place and space / a=places
+wak	ROOT	land	w=place and space / a=places
+wat	ROOT	sea	w=place and space / a=places
+wap	ROOT	island	w=place and space / a=places
+wen	ROOT	inside	w=place and space / e=relative position
+wel	ROOT	outside	w=place and space / e=relative position
+wer	ROOT	above	w=place and space / e=relative position
+wes	ROOT	below	w=place and space / e=relative position
+wek	ROOT	in front of	w=place and space / e=relative position
+wet	ROOT	behind	w=place and space / e=relative position
+wep	ROOT	beside	w=place and space / e=relative position
+win	ROOT	north	w=place and space / i=direction
+wil	ROOT	south	w=place and space / i=direction
+wir	ROOT	east	w=place and space / i=direction
+wis	ROOT	west	w=place and space / i=direction
+wik	ROOT	left	w=place and space / i=direction
+wit	ROOT	right	w=place and space / i=direction
+wip	ROOT	middle	w=place and space / i=direction
+won	ROOT	near	w=place and space / o=extent
+wol	ROOT	far	w=place and space / o=extent
+wor	ROOT	distance	w=place and space / o=extent
+wos	ROOT	height	w=place and space / o=extent
+wok	ROOT	depth	w=place and space / o=extent
+wot	ROOT	width	w=place and space / o=extent
+wop	ROOT	length	w=place and space / o=extent
+wun	ROOT	container	w=place and space / u=bounded space
+wul	ROOT	box	w=place and space / u=bounded space
+wur	ROOT	bag	w=place and space / u=bounded space
+wus	ROOT	border	w=place and space / u=bounded space
+wuk	ROOT	gate	w=place and space / u=bounded space
+wut	ROOT	way, route	w=place and space / u=bounded space
+wup	ROOT	corner	w=place and space / u=bounded space
+wum	ROOT	boundary of	w=place and space / u=bounded space
+yan	ROOT	time	y=time / a=time itself
+yal	ROOT	now	y=time / a=time itself
+yar	ROOT	past	y=time / a=time itself
+yas	ROOT	future	y=time / a=time itself
+yak	ROOT	moment	y=time / a=time itself
+yat	ROOT	period	y=time / a=time itself
+yap	ROOT	era	y=time / a=time itself
+yen	ROOT	day	y=time / e=units
+yel	ROOT	night	y=time / e=units
+yer	ROOT	year	y=time / e=units
+yes	ROOT	month	y=time / e=units
+yek	ROOT	week	y=time / e=units
+yet	ROOT	hour	y=time / e=units
+yep	ROOT	minute	y=time / e=units
+yin	ROOT	before	y=time / i=sequence
+yil	ROOT	after	y=time / i=sequence
+yir	ROOT	during	y=time / i=sequence
+yis	ROOT	start of	y=time / i=sequence
+yik	ROOT	end of	y=time / i=sequence
+yit	ROOT	between	y=time / i=sequence
+yip	ROOT	since	y=time / i=sequence
+yon	ROOT	always	y=time / o=frequency
+yol	ROOT	never	y=time / o=frequency
+yor	ROOT	often	y=time / o=frequency
+yos	ROOT	sometimes	y=time / o=frequency
+yok	ROOT	again	y=time / o=frequency
+yot	ROOT	still	y=time / o=frequency
+yop	ROOT	already	y=time / o=frequency
+yun	ROOT	fast	y=time / u=pace
+yul	ROOT	slow	y=time / u=pace
+yur	ROOT	long in time	y=time / u=pace
+yus	ROOT	brief	y=time / u=pace
+yuk	ROOT	sudden	y=time / u=pace
+yut	ROOT	gradual	y=time / u=pace
+yup	ROOT	constant	y=time / u=pace
