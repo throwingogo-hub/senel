@@ -305,6 +305,7 @@ gos	ROOT	speed	g=force and change / o=physical force
 gok	ROOT	pressure	g=force and change / o=physical force
 got	ROOT	resistance	g=force and change / o=physical force
 gop	ROOT	balance	g=force and change / o=physical force
+gom	ROOT	difficult	g=force and change / o=physical force
 gun	ROOT	work on	g=force and change / u=process
 gul	ROOT	use	g=force and change / u=process
 gur	ROOT	attempt	g=force and change / u=process
@@ -367,6 +368,7 @@ nis	ROOT	clear	n=perception / i=visual quality
 nik	ROOT	pattern	n=perception / i=visual quality
 nit	ROOT	visible	n=perception / i=visual quality
 nip	ROOT	hidden	n=perception / i=visual quality
+nim	ROOT	beautiful to see	n=perception / i=visual quality
 non	ROOT	noise	n=perception / o=auditory quality
 nol	ROOT	loud	n=perception / o=auditory quality
 nor	ROOT	quiet	n=perception / o=auditory quality
@@ -617,6 +619,7 @@ yis	ROOT	start of	y=time / i=sequence
 yik	ROOT	end of	y=time / i=sequence
 yit	ROOT	between	y=time / i=sequence
 yip	ROOT	since	y=time / i=sequence
+yim	ROOT	new, recent	y=time / i=sequence
 yon	ROOT	always	y=time / o=frequency
 yol	ROOT	never	y=time / o=frequency
 yor	ROOT	often	y=time / o=frequency
@@ -631,3 +634,4 @@ yus	ROOT	brief	y=time / u=pace
 yuk	ROOT	sudden	y=time / u=pace
 yut	ROOT	gradual	y=time / u=pace
 yup	ROOT	constant	y=time / u=pace
+yum	ROOT	old, of long standing	y=time / u=pace

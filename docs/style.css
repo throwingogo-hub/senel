@@ -1,0 +1,180 @@
+:root {
+  --bg: #ffffff;
+  --panel: #f6f7f9;
+  --ink: #16181d;
+  --muted: #63676f;
+  --line: #e2e5ea;
+  --accent: #2f6bff;
+  --accent-soft: #eaf0ff;
+  --warn: #8a5a00;
+  --warn-bg: #fff7e6;
+  --radius: 14px;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0f1115;
+    --panel: #171a21;
+    --ink: #e8eaee;
+    --muted: #9aa0aa;
+    --line: #262b34;
+    --accent: #7aa2ff;
+    --accent-soft: #1b2440;
+    --warn: #ffcf7a;
+    --warn-bg: #2a2213;
+  }
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font: 16px/1.55 ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+h1, h2, h3 { line-height: 1.25; }
+code, textarea, .output, .cards { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+
+/* ---------- header ---------- */
+.top {
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  flex-wrap: wrap;
+  padding: 20px clamp(16px, 4vw, 40px);
+  border-bottom: 1px solid var(--line);
+}
+.brand { display: flex; align-items: center; gap: 14px; }
+.logo {
+  width: 42px; height: 42px; flex: none;
+  display: grid; place-items: center;
+  border-radius: 12px;
+  background: var(--accent); color: #fff;
+  font-weight: 700; font-size: 22px;
+}
+.top h1 { margin: 0; font-size: 1.15rem; }
+.top p { margin: 2px 0 0; color: var(--muted); font-size: .875rem; }
+.repo {
+  color: var(--accent); text-decoration: none; font-size: .9rem; font-weight: 600;
+  white-space: nowrap;
+}
+.repo:hover { text-decoration: underline; }
+
+main { max-width: 1060px; margin: 0 auto; padding: clamp(16px, 3vw, 28px); }
+
+/* ---------- language bar ---------- */
+.langbar {
+  display: flex; align-items: center; gap: 8px; margin-bottom: 10px;
+}
+.lang {
+  flex: 1; padding: 10px 14px; min-width: 0;
+  border: 1px solid var(--line); border-radius: 999px;
+  background: var(--panel); color: var(--ink);
+  font: inherit; font-weight: 600; font-size: .95rem;
+  cursor: default;
+}
+.swap {
+  flex: none; width: 42px; height: 42px;
+  border: 1px solid var(--line); border-radius: 50%;
+  background: var(--bg); color: var(--accent);
+  font-size: 18px; cursor: pointer;
+  transition: transform .18s ease, background .18s ease;
+}
+.swap:hover { background: var(--accent-soft); }
+.swap:active { transform: rotate(180deg); }
+
+/* ---------- panes ---------- */
+.panes { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+@media (max-width: 720px) { .panes { grid-template-columns: 1fr; } }
+
+.pane {
+  display: flex; flex-direction: column;
+  border: 1px solid var(--line); border-radius: var(--radius);
+  background: var(--panel);
+  overflow: hidden;
+}
+.pane.out { background: var(--bg); }
+textarea, .output {
+  flex: 1; min-height: 190px;
+  padding: 18px; border: 0; margin: 0;
+  background: transparent; color: var(--ink);
+  font-size: 1.05rem; line-height: 1.6;
+  resize: vertical; outline: none;
+  white-space: pre-wrap; word-break: break-word;
+}
+.output:empty::before { content: "Translation"; color: var(--muted); }
+.paneFoot {
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  padding: 8px 14px; border-top: 1px solid var(--line);
+  color: var(--muted); font-size: .8rem; min-height: 38px;
+}
+.ghost {
+  border: 1px solid var(--line); border-radius: 8px;
+  background: transparent; color: var(--ink);
+  padding: 4px 12px; font: inherit; font-size: .8rem; cursor: pointer;
+}
+.ghost:hover { background: var(--accent-soft); border-color: var(--accent); }
+
+/* ---------- notes ---------- */
+.notes {
+  margin-top: 12px; padding: 12px 16px;
+  border: 1px solid color-mix(in srgb, var(--warn) 35%, transparent);
+  border-radius: var(--radius);
+  background: var(--warn-bg); color: var(--warn);
+  font-size: .875rem;
+}
+.notes ul { margin: 0; padding-left: 20px; }
+.notes li + li { margin-top: 5px; }
+
+/* ---------- examples ---------- */
+.examples {
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  margin-top: 16px;
+}
+.examples .label { color: var(--muted); font-size: .85rem; }
+.examples button {
+  border: 1px solid var(--line); border-radius: 999px;
+  background: var(--panel); color: var(--ink);
+  padding: 6px 13px; font: inherit; font-size: .82rem; cursor: pointer;
+}
+.examples button:hover { border-color: var(--accent); color: var(--accent); }
+
+/* ---------- breakdown ---------- */
+.breakdown { margin-top: 34px; }
+.breakdown h2, .explain h2 { font-size: 1.05rem; margin: 0 0 6px; }
+.hint, .small { color: var(--muted); font-size: .875rem; margin: 0 0 14px; }
+.cards { display: flex; flex-wrap: wrap; gap: 10px; }
+.card {
+  flex: 1 1 168px; min-width: 0;
+  border: 1px solid var(--line); border-radius: 12px;
+  background: var(--panel); padding: 12px 14px;
+}
+.card .w { font-size: 1.1rem; font-weight: 700; letter-spacing: .3px; }
+.card .g { font-size: .85rem; margin-top: 3px; font-family: ui-sans-serif, system-ui, sans-serif; }
+.card .d {
+  font-size: .74rem; color: var(--muted); margin-top: 7px;
+  font-family: ui-sans-serif, system-ui, sans-serif;
+}
+.card .tag {
+  display: inline-block; margin-top: 8px; padding: 1px 8px;
+  border-radius: 999px; background: var(--accent-soft); color: var(--accent);
+  font-size: .68rem; font-weight: 700; letter-spacing: .5px; text-transform: uppercase;
+  font-family: ui-sans-serif, system-ui, sans-serif;
+}
+
+/* ---------- explainer ---------- */
+.explain { margin-top: 40px; border-top: 1px solid var(--line); padding-top: 26px; }
+.cols { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+@media (max-width: 720px) { .cols { grid-template-columns: 1fr; } }
+.explain h3 { font-size: .95rem; margin: 0 0 6px; }
+.explain p { margin: 0 0 10px; font-size: .9rem; color: var(--muted); }
+.explain table { border-collapse: collapse; font-size: .875rem; }
+.explain td { padding: 3px 14px 3px 0; }
+.explain code {
+  background: var(--panel); border: 1px solid var(--line);
+  border-radius: 6px; padding: 1px 7px; font-size: .85rem;
+}
+
+footer {
+  max-width: 1060px; margin: 0 auto; padding: 30px clamp(16px, 3vw, 28px) 60px;
+  color: var(--muted); font-size: .85rem;
+}
+footer a { color: var(--accent); }

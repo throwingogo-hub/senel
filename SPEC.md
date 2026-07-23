@@ -150,7 +150,7 @@ Each domain divides five ways. For `k` (parts and structure):
 | `ko‑` | generic parts | `kon` part, `kol` piece, `kor` edge, `kos` centre, `kok` layer, `kot` joint, `kop` tip |
 | `ku‑` | form | `kun` structure, `kul` frame, `kur` line, `kus` point, `kuk` shape, `kut` angle |
 
-The full 553-root map is in `lexicon.tsv`, one line per root, with its derivation.
+The full 557-root map is in `lexicon.tsv`, one line per root, with its derivation.
 
 ### 3.3 Why the item goes in the weakest position
 
@@ -295,7 +295,7 @@ Questions, commands and hypotheticals take a mood particle instead: `he` `we` `p
   double negation and no negative concord: `yam` (none) is already negative.
 - **Polar question** — `he` at the end: `Sin nal ta til he?`
 - **Content question** — `nam` (which) plus the right root, in place, no movement, no
-  new words: `nam ran` who · `nam wan` where · `nam yan` when · `nam ul` how many ·
+  new words: `ran nam` who · `wan nam` where · `yan nam` when · `ul nam` how many ·
   `un nam` why · `u nam` how. Eight English interrogatives replaced by one rule.
 - **Comparison** — degree particle plus `an` (from) for the standard:
   `Til es mi ur an tir lo.` the dog is more size-from the cat = the dog is bigger.
@@ -360,8 +360,8 @@ Each of these is a documented, real source of failure in natural language:
 Universal Declaration of Human Rights, Article 1:
 
 ```
-Lam ran har fum nu es i fom nu rum yo.
-all person be-born free and be-same at dignity and right [established]
+Ran lam har fum nu es i fom nu rum yo.
+person all be-born free and be-same at dignity and right [established]
 
 Tun dar men nu mom, du gum gan o tal on rusmu yo.
 they have reason and conscience, so must act to each-other with cooperation-ness
@@ -406,7 +406,7 @@ Stated plainly, because a design document that only lists wins is advertising.
    no etymological depth and no accumulated idiom. Politeness must be said outright
    with words like `fol` (respect). This is a deliberate cut, and it makes the language
    flatter than any natural one.
-4. **Vocabulary depth.** 553 roots plus derivation covers ordinary life. Medicine, law
+4. **Vocabulary depth.** 557 roots plus derivation covers ordinary life. Medicine, law
    and engineering would each need their subdomains filled out.
 5. **Adoption.** Design quality has never been what determines whether a constructed
    language is used. Nothing here changes that.
@@ -423,6 +423,6 @@ python3 senel.py count "<text>"   # syllable count
 python3 senel.py merge            # which words collapse for a given L1's ear
 ```
 
-`validate` currently reports: 553 roots, 100% one syllable, 65 grammar words,
+`validate` currently reports: 557 roots, 100% one syllable, 65 grammar words,
 **0 irregular forms**, 0 phonotactic violations, 0 shape-rule violations, 0 duplicate
 forms, 0 echo-vowel hazards.

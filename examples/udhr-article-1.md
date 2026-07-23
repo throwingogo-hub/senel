@@ -7,14 +7,14 @@
 
 ## Senel (25 syllables)
 
-> Lam ran har fum nu es i fom nu rum yo.
+> Ran lam har fum nu es i fom nu rum yo.
 > Tun dar men nu mom, du gum gan o tal on rusmu yo.
 
 ## Interlinear
 
 ```
 Lam  ran     har       fum   nu   es           i   fom      nu   rum    yo.
-all  person  be-born   free  and  be-the-same  at  dignity  and  right  [established knowledge]
+person all  be-born   free  and  be-the-same  at  dignity  and  right  [established knowledge]
 
 Tun   dar   men     nu   mom,         du    gum   gan  o   tal         on    rus-mu          yo.
 they  have  reason  and  conscience,  then  must  act  to  each-other  with  cooperate-ness  [established knowledge]
@@ -35,6 +35,6 @@ they  have  reason  and  conscience,  then  must  act  to  each-other  with  coo
 Verify with:
 
 ```bash
-python3 senel.py count "Lam ran har fum nu es i fom nu rum yo."
+python3 senel.py count "Ran lam har fum nu es i fom nu rum yo."
 python3 senel.py gloss "Tun dar men nu mom du gum gan o tal on rusmu yo."
 ```

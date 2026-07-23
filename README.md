@@ -7,9 +7,13 @@
 
 <p align="center">
   <a href="https://github.com/throwingogo-hub/senel/actions/workflows/validate.yml"><img alt="validate" src="https://github.com/throwingogo-hub/senel/actions/workflows/validate.yml/badge.svg"></a>
-  <img alt="roots" src="https://img.shields.io/badge/roots-553-blue">
+  <img alt="roots" src="https://img.shields.io/badge/roots-557-blue">
   <img alt="irregular forms" src="https://img.shields.io/badge/irregular%20forms-0-brightgreen">
   <img alt="license" src="https://img.shields.io/badge/license-MIT-lightgrey">
+</p>
+
+<p align="center">
+  <a href="https://throwingogo-hub.github.io/senel/"><b>→ Try the translator in your browser ←</b></a>
 </p>
 
 ---
@@ -30,7 +34,7 @@ In Senel, a word is **built out of its meaning**:
    └──────────────────── domain: living kinds
 ```
 
-So you don't memorise 553 unrelated words. You learn **16 domains**, and the rest
+So you don't memorise 557 unrelated words. You learn **16 domains**, and the rest
 decodes itself:
 
 | | | | | |
@@ -97,15 +101,47 @@ Pe mun hen tal.             Let's eat together.
 Til es mi ur an tir lo.     The dog is bigger than the cat.
 ```
 
+## There's a translator
+
+**[throwingogo-hub.github.io/senel](https://throwingogo-hub.github.io/senel/)** — English
+⇄ Senel, running entirely in your browser. No server, no network requests, no API key.
+
+It is rule-based rather than statistical, which for this language is the right choice:
+Senel was designed to be unambiguous, so Senel → English is close to exact. English →
+Senel is the hard direction, because English omits things Senel requires — and rather
+than quietly guessing, the translator tells you what it had to decide:
+
+> **English 'we' is ambiguous; Senel requires a choice.** Used `mon` (we, NOT including
+> you) — swap to `mun` to include them.
+
+> **Senel requires an evidential; guessed `lo` (you witnessed it).** Use `to` if told,
+> `mo` if inferred, `yo` if general knowledge, `so` if internal.
+
+Every translation also comes with a word-by-word breakdown showing which semantic domain
+each word came from, so the page teaches the system while it translates.
+
+From the terminal:
+
+```bash
+python3 translate.py en2sn "I am going to your house."
+# Min bal ka o pin en sin lo.
+
+python3 translate.py sn2en "Til em i pin en sin lo."
+# The dog exists at the building of you.  [I saw it]
+```
+
 ## Try it in 30 seconds
 
 ```bash
 git clone https://github.com/throwingogo-hub/senel.git && cd senel
 python3 senel.py validate                # prove the language obeys its own rules
 python3 senel.py gloss "Lol ka mo."      # interlinear gloss
-python3 senel.py count "Lam ran har fum nu es i fom nu rum yo."
+python3 senel.py count "Ran lam har fum nu es i fom nu rum yo."
 python3 senel.py merge japanese          # which words collapse for a given L1's ear
-python3 build_lexicon.py                 # regenerate all 553 roots from the semantic map
+python3 build_lexicon.py                 # regenerate all 557 roots from the semantic map
+python3 translate.py en2sn "I don't know."
+python3 tests/test_examples.py           # every example in the docs must parse
+python3 tests/test_parity.py             # the Python and browser translators must agree
 ```
 
 No dependencies. Python 3 standard library only.
@@ -116,8 +152,8 @@ The vocabulary isn't a hand-written list — it's **generated** from a semantic 
 [`build_lexicon.py`](build_lexicon.py), and every structural claim is verified in CI:
 
 ```
-lexicon            632 entries
-  content roots    553  (553 monosyllabic, 100%)
+lexicon            636 entries
+  content roots    557  (557 monosyllabic, 100%)
   grammar words    65   (all monosyllabic)
   irregular forms  0    (no root ever changes shape)
 
@@ -172,7 +208,8 @@ compression, parse ambiguity and irregularity — which is what this project tar
 
 - **[SPEC.md](SPEC.md)** — complete reference grammar: phonology, the full semantic map,
   every grammar word, subordination, numbers, and the measurements
-- **[lexicon.tsv](lexicon.tsv)** — all 632 entries with their derivations
+- **[lexicon.tsv](lexicon.tsv)** — all 636 entries with their derivations
+- **[examples/phrasebook.md](examples/phrasebook.md)** — everyday phrases, with literal glosses
 - **[CONTRIBUTING.md](CONTRIBUTING.md)** — how to add roots without breaking the system
 
 ## License

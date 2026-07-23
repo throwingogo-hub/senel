@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Senel Translator</title>
+<meta name="description" content="Translate between English and Senel, a constructed language where the sound of a word is derived from its meaning.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='26' font-size='26'>🗣️</text></svg>">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="top">
+  <div class="brand">
+    <span class="logo">S</span>
+    <div>
+      <h1>Senel Translator</h1>
+      <p>A language where the sound of a word is derived from its meaning.</p>
+    </div>
+  </div>
+  <a class="repo" href="https://github.com/throwingogo-hub/senel">View on GitHub →</a>
+</header>
+
+<main>
+  <div class="langbar">
+    <button class="lang" id="fromLang">English</button>
+    <button class="swap" id="swap" title="Swap languages" aria-label="Swap languages">⇄</button>
+    <button class="lang" id="toLang">Senel</button>
+  </div>
+
+  <div class="panes">
+    <section class="pane">
+      <textarea id="input" placeholder="Type something…" spellcheck="false"
+        autocomplete="off" autofocus></textarea>
+      <div class="paneFoot"><span id="counter">0 characters</span></div>
+    </section>
+
+    <section class="pane out">
+      <output id="output" class="output"></output>
+      <div class="paneFoot">
+        <span id="syllables"></span>
+        <button id="copy" class="ghost">Copy</button>
+      </div>
+    </section>
+  </div>
+
+  <div id="notes" class="notes" hidden></div>
+
+  <div class="examples">
+    <span class="label">Try:</span>
+    <button data-ex="I am going to your house.">I am going to your house.</button>
+    <button data-ex="Where is the toilet?">Where is the toilet?</button>
+    <button data-ex="The dog is bigger than the cat.">The dog is bigger than the cat.</button>
+    <button data-ex="We will eat together.">We will eat together.</button>
+    <button data-ex="I don't know.">I don't know.</button>
+  </div>
+
+  <section id="breakdown" class="breakdown" hidden>
+    <h2>Word by word</h2>
+    <p class="hint">Senel words are built from their meaning: the first consonant is the
+      semantic domain, the vowel the subdomain, the last consonant the item.</p>
+    <div id="cards" class="cards"></div>
+  </section>
+
+  <section class="explain">
+    <h2>Two things English leaves out and Senel requires</h2>
+    <div class="cols">
+      <div>
+        <h3>How you know it</h3>
+        <p>Every statement ends with one syllable saying where the claim comes from.
+          Translating <em>from</em> English, the translator has to guess — and it tells
+          you when it does.</p>
+        <table>
+          <tr><td><code>lo</code></td><td>I saw it</td></tr>
+          <tr><td><code>to</code></td><td>I was told</td></tr>
+          <tr><td><code>mo</code></td><td>I infer it</td></tr>
+          <tr><td><code>yo</code></td><td>established knowledge</td></tr>
+          <tr><td><code>so</code></td><td>my own state or intent</td></tr>
+        </table>
+      </div>
+      <div>
+        <h3>Whether “we” includes you</h3>
+        <p>English <em>we</em> is ambiguous and the ambiguity causes real trouble.
+          Senel has two words and you must pick one.</p>
+        <table>
+          <tr><td><code>mun</code></td><td>we, including you</td></tr>
+          <tr><td><code>mon</code></td><td>we, not including you</td></tr>
+        </table>
+        <p class="small">The same applies to <em>or</em>: <code>bu</code> is “one or
+          both”, <code>pu</code> is “exactly one”.</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <p>Rule-based, not statistical — it runs entirely in your browser, with no server and
+    no network requests. Senel → English is close to exact because the language is
+    designed to be unambiguous. English → Senel is the hard direction and will show its
+    working. <a href="https://github.com/throwingogo-hub/senel/blob/main/SPEC.md">Read
+    the grammar →</a></p>
+</footer>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+<script src="ui.js"></script>
+</body>
+</html>

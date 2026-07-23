@@ -12,7 +12,7 @@ so greetings are just short sentences. Check any line with
 | `Pe yen fin.` | may the day be-good | Good day. |
 | `Sin es fin he?` | you are good? | How are you? |
 | `Min es fin so.` | I am good [internal] | I'm well. |
-| `Sul en sin es nam um he?` | name of you is which thing? | What's your name? |
+| `Sul en sin es um nam he?` | name of you is which thing? | What's your name? |
 | `Sul en min es Tomi so.` | name of me is Tomi | My name is Tomi. |
 | `Pe sin bal fin.` | may you go well | Goodbye. |
 
@@ -29,8 +29,8 @@ the language exempt from the sound rules.
 | `Min ne mal so.` | I not know | I don't know. |
 | `Run we!` | help [command] | Help! |
 | `El.` / `Er.` | true / false | Yes. / No. |
-| `Huswa em i nam wan he?` | waste-place is at which place? | Where is the toilet? |
-| `Dop en tam es nam ul he?` | cost of that is which amount? | How much is that? |
+| `Huswa em i wan nam he?` | waste-place is at which place? | Where is the toilet? |
+| `Dop en tam es ul nam he?` | cost of that is which amount? | How much is that? |
 | `Nam yet he?` | which hour? | What time is it? |
 
 ## Saying things about the world

@@ -37,7 +37,7 @@ EXAMPLES = [
     "Sin nal ta til he?",
     "Min mal fu sin bal ta lo.",
     "Til fin lo.",
-    "Lam ran har fum nu es i fom nu rum yo.",
+    "Ran lam har fum nu es i fom nu rum yo.",
 ]
 
 
