@@ -79,3 +79,6 @@ today tomorrow yesterday hour minute early late soon now
 name word number letter book paper pen story song game
 school work money price shop market road street city country
 music picture phone computer light sound voice question answer
+
+# --- colloquial & anatomy (literal senses) ---
+suck buttocks ass butt penis vagina breast naked shit pee sex
