@@ -83,3 +83,8 @@ music picture phone computer light sound voice question answer
 # --- colloquial & anatomy (literal senses) ---
 suck buttocks ass butt penis vagina breast naked shit pee sex
 sing tail
+
+# --- abstract & function ---
+someone everyone anyone nobody something everything anything nothing somewhere everywhere
+accept achieve agree peace danger belief decision action effect effort evidence freedom
+goal knowledge courage science author weapon require protect provide success victory
