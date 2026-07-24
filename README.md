@@ -7,7 +7,7 @@
 
 <p align="center">
   <a href="https://github.com/throwingogo-hub/senel/actions/workflows/validate.yml"><img alt="validate" src="https://github.com/throwingogo-hub/senel/actions/workflows/validate.yml/badge.svg"></a>
-  <img alt="roots" src="https://img.shields.io/badge/roots-557-blue">
+  <img alt="roots" src="https://img.shields.io/badge/roots-558-blue">
   <img alt="irregular forms" src="https://img.shields.io/badge/irregular%20forms-0-brightgreen">
   <img alt="license" src="https://img.shields.io/badge/license-MIT-lightgrey">
 </p>
@@ -34,7 +34,7 @@ In Senel, a word is **built out of its meaning**:
    └──────────────────── domain: living kinds
 ```
 
-So you don't memorise 557 unrelated words. You learn **16 domains**, and the rest
+So you don't memorise 558 unrelated words. You learn **16 domains**, and the rest
 decodes itself:
 
 | | | | | |
@@ -110,9 +110,12 @@ It is rule-based rather than statistical, which for this language is the right c
 Senel was designed to be unambiguous, so Senel → English is close to exact. English →
 Senel is the hard direction. Its front end now expands contractions, tests several
 plausible lemmas instead of blindly stripping suffixes, performs longest-phrase matching,
-and builds transparent Senel derivations and compounds where possible. The catalogue
-contains more than 900 English expressions while the language itself remains the same
-557-root system.
+and builds transparent Senel derivations and compounds where possible. Everyday
+vocabulary — food, animals, colours, the body, family, weather — is covered the way the
+language itself works: `lunch` is `yenhem` ("day-meal"), `red` is `ninkel`
+("colour-of-blood"), `son` is `relrom` ("male-child"), all composed from existing roots
+rather than borrowed. The catalogue contains more than 1,100 English expressions while
+the language itself remains almost entirely the same 558-root system.
 
 English also omits things Senel requires — and rather than quietly guessing, the
 translator tells you what it had to decide:
@@ -151,7 +154,7 @@ python3 senel.py validate                # prove the language obeys its own rule
 python3 senel.py gloss "Lol ka mo."      # interlinear gloss
 python3 senel.py count "Ran lam har fum nu es i fom nu rum yo."
 python3 senel.py merge japanese          # which words collapse for a given L1's ear
-python3 build_lexicon.py                 # regenerate all 557 roots from the semantic map
+python3 build_lexicon.py                 # regenerate all 558 roots from the semantic map
 python3 translate.py en2sn "I don't know."
 python3 tests/test_examples.py           # every example in the docs must parse
 python3 tests/test_translation.py        # contractions, morphology and fallback regressions
@@ -168,7 +171,7 @@ The vocabulary isn't a hand-written list — it's **generated** from a semantic 
 
 ```
 lexicon            636 entries
-  content roots    557  (557 monosyllabic, 100%)
+  content roots    558  (558 monosyllabic, 100%)
   grammar words    65   (all monosyllabic)
   irregular forms  0    (no root ever changes shape)
 

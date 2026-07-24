@@ -27,11 +27,19 @@ whether it is a synonym, inflection, idiom, transparent derivation, compound or 
 new concept.
 
 - Add synonyms, idioms and canonical English renderings to
-  [`english_aliases.tsv`](english_aliases.tsv).
+  [`english_aliases.tsv`](english_aliases.tsv). Everyday concepts are best expressed as
+  **compounds of existing roots**, the same way the language builds them — `lunch` is
+  `yenhem` (`yen` day + `hem` meal), `red` is `ninkel` (`nin` colour + `kel` blood),
+  `son` is `relrom` (`rel` child + `rom` male). Store the concatenated form (e.g.
+  `lunch  noun  yenhem`); it is recognised as a `COMPOUND` and reverse-glosses back to
+  the canonical English word. Reach for a new root only when no composition is honest.
 - Never edit `docs/aliases.js` independently: its embedded TSV block must remain
-  byte-for-byte identical, and `tests/test_translation.py` enforces this.
+  byte-for-byte identical, and `tests/test_translation.py` enforces this. After editing
+  the TSV, resync it (swap the text inside `` raw: `…` `` with the new file contents).
 - Add representative sentences to `tests/coverage_corpus.txt`; the unknown-token rate
   may not exceed 5%, and every generated Senel token must parse.
+- Add everyday words to `tests/common_words.txt`; `tests/test_coverage.py` requires
+  every one of them to translate without a `«quoted»` or `[bracketed]` fallback.
 - Add semantic edge cases to `tests/parity_cases.json`, so Python and JavaScript cannot
   diverge on contractions, morphology, compounds or fallback behaviour.
 

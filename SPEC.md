@@ -150,7 +150,7 @@ Each domain divides five ways. For `k` (parts and structure):
 | `ko‑` | generic parts | `kon` part, `kol` piece, `kor` edge, `kos` centre, `kok` layer, `kot` joint, `kop` tip |
 | `ku‑` | form | `kun` structure, `kul` frame, `kur` line, `kus` point, `kuk` shape, `kut` angle |
 
-The full 557-root map is in `lexicon.tsv`, one line per root, with its derivation.
+The full 558-root map is in `lexicon.tsv`, one line per root, with its derivation.
 
 ### 3.3 Why the item goes in the weakest position
 
@@ -406,7 +406,7 @@ Stated plainly, because a design document that only lists wins is advertising.
    no etymological depth and no accumulated idiom. Politeness must be said outright
    with words like `fol` (respect). This is a deliberate cut, and it makes the language
    flatter than any natural one.
-4. **Vocabulary depth.** 557 roots plus derivation covers ordinary life. Medicine, law
+4. **Vocabulary depth.** 558 roots plus derivation covers ordinary life. Medicine, law
    and engineering would each need their subdomains filled out.
 5. **Adoption.** Design quality has never been what determines whether a constructed
    language is used. Nothing here changes that.
@@ -423,6 +423,6 @@ python3 senel.py count "<text>"   # syllable count
 python3 senel.py merge            # which words collapse for a given L1's ear
 ```
 
-`validate` currently reports: 557 roots, 100% one syllable, 65 grammar words,
+`validate` currently reports: 558 roots, 100% one syllable, 65 grammar words,
 **0 irregular forms**, 0 phonotactic violations, 0 shape-rule violations, 0 duplicate
 forms, 0 echo-vowel hazards.

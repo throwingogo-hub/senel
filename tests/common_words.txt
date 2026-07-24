@@ -1,0 +1,81 @@
+# Everyday English vocabulary coverage target for Senel.
+# One lemma per line; blank lines and # comments ignored.
+# The coverage gate (tests/test_coverage.py) requires every word here to
+# translate to Senel without a «quoted» or [bracketed] fallback.
+# Grouped by semantic field for review; grouping has no effect on the test.
+
+# --- food & drink ---
+food meal breakfast lunch dinner supper snack bread rice noodle pasta
+meat beef pork chicken fish egg cheese butter milk cream yogurt
+fruit apple banana orange grape lemon berry melon peach pear
+vegetable potato tomato onion carrot bean pea corn cabbage garlic
+salt sugar pepper spice oil sauce honey jam soup salad
+water juice coffee tea wine beer drink cook bake fry boil taste
+hungry thirsty sweet sour bitter fresh ripe raw
+
+# --- kitchen & home objects ---
+kitchen plate bowl cup glass spoon fork knife pot pan
+bottle jar box bag basket bucket brush soap towel
+bed chair table desk sofa shelf lamp mirror clock
+door window wall floor roof stair key lock roof garden yard
+house home room apartment building
+
+# --- clothing ---
+clothes shirt trousers dress skirt coat jacket hat shoe sock
+glove scarf belt button pocket cloth wear
+
+# --- body ---
+body head hair face eye ear nose mouth tooth tongue lip
+neck shoulder arm hand finger nail chest back leg knee foot
+heart blood bone skin brain stomach
+
+# --- family & people ---
+family parent mother father son daughter brother sister baby child
+husband wife grandmother grandfather uncle aunt cousin
+friend neighbour stranger person people man woman boy girl
+
+# --- animals ---
+animal dog cat horse cow pig sheep goat chicken duck
+bird eagle owl fish shark whale snake frog turtle lizard
+insect bee ant fly spider butterfly mouse rat rabbit lion
+tiger bear wolf fox deer monkey elephant
+
+# --- nature & weather ---
+nature earth ground soil sand stone rock hill mountain valley
+river lake sea ocean island beach forest field desert
+tree flower leaf grass seed wood plant
+sun moon star sky cloud rain snow wind storm fog
+fire ice smoke light shadow
+
+# --- colours ---
+colour red green blue yellow orange purple pink brown grey
+black white gold silver
+
+# --- verbs (everyday actions) ---
+sit stand walk run jump climb fall swim fly crawl
+come go stay leave return arrive enter exit follow
+eat drink sleep wake rest work play rest breathe
+see look watch hear listen smell touch feel taste
+speak talk say tell ask answer call shout whisper read write
+think know learn teach remember forget understand believe
+want need like love hate hope wish choose
+give take get put keep hold carry bring send
+make build break fix cut open close push pull throw catch
+buy sell pay count wash clean cook help wait meet
+
+# --- adjectives (everyday qualities) ---
+big small long short tall high low wide narrow thick thin
+heavy light hard soft hot cold warm cool wet dry
+clean dirty new old young full empty open closed
+fast slow strong weak loud quiet bright dark
+good bad happy sad angry afraid tired sick well
+rich poor easy difficult cheap free important true
+
+# --- time ---
+time day night morning noon evening week month year
+today tomorrow yesterday hour minute early late soon now
+
+# --- misc everyday nouns ---
+name word number letter book paper pen story song game
+school work money price shop market road street city country
+music picture phone computer light sound voice question answer

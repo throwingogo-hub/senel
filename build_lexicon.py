@@ -288,6 +288,7 @@ EXTRA = {
     ("y", "u", "m"): "old, of long standing",
     ("g", "o", "m"): "difficult",
     ("n", "i", "m"): "beautiful to see",
+    ("t", "i", "m"): "pig",
 }
 
 GRAMMAR = """a	ROLE	AGENT (subject; omitted in canonical order)	bare vowel = role
