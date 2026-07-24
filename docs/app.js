@@ -301,6 +301,9 @@
         if (COPULA.has(w) && !progressiveAux) out.push("es");
         i++; continue;
       }
+      // Single-word modals are captured once by `modal` (first pass); don't let the
+      // concept trie emit them again (e.g. "must" is also the gloss of root gum).
+      if (MODALS[w]) { i++; continue; }
       if (w === "than") { out.push("an"); i++; continue; }
 
       const phraseMatch = longestPhrase(words, i);
@@ -331,7 +334,7 @@
           const val = table[phrase];
           if (name === "we") notes.push("English 'we' is ambiguous; Senel requires a choice. " +
             "Used mon (we, NOT including you) — swap to mun to include them.");
-          if (name === "modal") { matched = true; i += span; break; }
+          if (name === "modal") { modal = val; matched = true; i += span; break; }
           if ((name === "pron" || name === "we") &&
               ["my", "your", "his", "her", "its", "their", "our", "ours"].includes(phrase)) {
             possessor = val; matched = true; i += span; break;

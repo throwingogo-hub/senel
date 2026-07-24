@@ -392,37 +392,14 @@ fuck	verb	kemget
 bitch	noun	tilrem	
 naked	property	nahut	
 nude	property	nahut	
+while	gram	yir	whilst|meanwhile
+
+# --- verb & misc gaps found in expressiveness audit ---
+sing	verb	nosnel	
+tail	noun	kitkop	
 `,
-  contractions: {
-    "won't": "will not", "can't": "can not", "cannot": "can not",
-    "shan't": "shall not", "ain't": "is not", "don't": "do not",
-    "doesn't": "does not", "didn't": "did not", "isn't": "is not",
-    "aren't": "are not", "wasn't": "was not", "weren't": "were not",
-    "haven't": "have not", "hasn't": "has not", "hadn't": "had not",
-    "wouldn't": "would not", "shouldn't": "should not", "couldn't": "could not",
-    "mustn't": "must not", "mightn't": "might not", "i'm": "i am",
-    "you're": "you are", "we're": "we are", "they're": "they are",
-    "he's": "he is", "she's": "she is", "it's": "it is", "that's": "that is",
-    "there's": "there is", "i've": "i have", "you've": "you have",
-    "we've": "we have", "they've": "they have", "i'll": "i will",
-    "you'll": "you will", "he'll": "he will", "she'll": "she will",
-    "we'll": "we will", "they'll": "they will", "i'd": "i would",
-    "you'd": "you would", "he'd": "he would", "she'd": "she would",
-    "we'd": "we would", "they'd": "they would", "let's": "let us"
-  },
-  pastIrregularForms: [
-    "ate", "began", "begun", "bought", "broke", "broken", "built", "came",
-    "died", "drank", "drunk", "eaten", "felt", "found", "gave", "given",
-    "gone", "got", "gotten", "heard", "helped", "knew", "known", "left",
-    "liked", "lived", "lost", "loved", "made", "met", "needed", "paid",
-    "ran", "read", "said", "saw", "seen", "slept", "sold", "taken",
-    "thought", "told", "took", "understood", "wanted", "went", "worked",
-    "written", "wrote"
-  ],
-  modals: {
-    "can": "gol", "could": "gol", "must": "gum", "should": "gum",
-    "have to": "gum", "has to": "gum", "need to": "far", "may": "fus",
-    "might": "fus"
-  },
-  modalRootsEn: { "gol": "can", "gum": "must", "fus": "may", "far": "need to" }
+  contractions: {"won't": "will not", "can't": "can not", "cannot": "can not", "shan't": "shall not", "ain't": "is not", "don't": "do not", "doesn't": "does not", "didn't": "did not", "isn't": "is not", "aren't": "are not", "wasn't": "was not", "weren't": "were not", "haven't": "have not", "hasn't": "has not", "hadn't": "had not", "wouldn't": "would not", "shouldn't": "should not", "couldn't": "could not", "mustn't": "must not", "mightn't": "might not", "i'm": "i am", "you're": "you are", "we're": "we are", "they're": "they are", "he's": "he is", "she's": "she is", "it's": "it is", "that's": "that is", "there's": "there is", "i've": "i have", "you've": "you have", "we've": "we have", "they've": "they have", "i'll": "i will", "you'll": "you will", "he'll": "he will", "she'll": "she will", "we'll": "we will", "they'll": "they will", "i'd": "i would", "you'd": "you would", "he'd": "he would", "she'd": "she would", "we'd": "we would", "they'd": "they would", "let's": "let us"},
+  pastIrregularForms: ["ate", "began", "begun", "bought", "broke", "broken", "built", "came", "died", "drank", "drunk", "eaten", "felt", "found", "gave", "given", "gone", "got", "gotten", "heard", "helped", "knew", "known", "left", "liked", "lived", "lost", "loved", "made", "met", "needed", "paid", "ran", "read", "said", "saw", "seen", "slept", "sold", "taken", "thought", "told", "took", "understood", "wanted", "went", "worked", "written", "wrote"],
+  modals: {"can": "gol", "could": "gol", "must": "gum", "should": "gumdi", "ought to": "gumdi", "have to": "gum", "has to": "gum", "need to": "far", "may": "fus", "might": "fus"},
+  modalRootsEn: {"gol": "can", "gum": "must", "gumdi": "should", "fus": "may", "far": "need to"}
 };

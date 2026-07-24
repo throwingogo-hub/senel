@@ -38,7 +38,7 @@ jobs:
       - name: The web translator's data must be current
         run: |
           python3 translate.py data
-          git diff --exit-code docs/data.js
+          git diff --exit-code docs/data.js docs/aliases.js
 
       - name: Python and JavaScript must translate identically
         run: python3 tests/test_parity.py

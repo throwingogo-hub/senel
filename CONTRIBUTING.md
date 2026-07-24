@@ -33,9 +33,10 @@ new concept.
   `son` is `relrom` (`rel` child + `rom` male). Store the concatenated form (e.g.
   `lunch  noun  yenhem`); it is recognised as a `COMPOUND` and reverse-glosses back to
   the canonical English word. Reach for a new root only when no composition is honest.
-- Never edit `docs/aliases.js` independently: its embedded TSV block must remain
-  byte-for-byte identical, and `tests/test_translation.py` enforces this. After editing
-  the TSV, resync it (swap the text inside `` raw: `…` `` with the new file contents).
+- Never edit `docs/aliases.js` by hand: it is generated. After editing the TSV (or any
+  English table such as `MODALS`), run `python3 translate.py data`, which regenerates
+  both `docs/data.js` and `docs/aliases.js`. CI diffs both, and
+  `tests/test_translation.py` asserts the embedded TSV block is byte-identical.
 - Add representative sentences to `tests/coverage_corpus.txt`; the unknown-token rate
   may not exceed 5%, and every generated Senel token must parse.
 - Add everyday words to `tests/common_words.txt`; `tests/test_coverage.py` requires

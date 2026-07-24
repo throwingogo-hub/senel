@@ -149,7 +149,8 @@ ASPECT_WORDS = {
     "usually": "sa", "always": "sa", "often": "sa", "sometimes": "sa",
     "already": "ma",
 }
-MODALS = {"can": "gol", "could": "gol", "must": "gum", "should": "gum",
+MODALS = {"can": "gol", "could": "gol", "must": "gum",
+          "should": "gumdi", "ought to": "gumdi",
           "have to": "gum", "has to": "gum", "need to": "far",
           "may": "fus", "might": "fus", "would": None}
 
@@ -178,7 +179,8 @@ IRREGULAR_VERBS = {
     "broken": "break", "left": "leave", "leaving": "leave", "met": "meet",
     "meeting": "meet", "found": "find", "finding": "find", "lost": "lose",
     "losing": "lose", "began": "begin", "begun": "begin",
-    "understood": "understand", "children": "child", "people": "person",
+    "understood": "understand", "sang": "sing", "sung": "sing",
+    "singing": "sing", "children": "child", "people": "person",
     "men": "man", "women": "woman", "feet": "foot", "teeth": "tooth",
     "wanted": "want", "needed": "need", "helped": "help", "worked": "work",
     "lived": "live", "died": "die", "loved": "love", "liked": "like",
@@ -590,6 +592,12 @@ def en2sn(text: str, strict=False):
                 out.append("es")
             i += 1
             continue
+        # Single-word modals are captured once by the modal variable (first pass)
+        # and re-inserted at the verb slot; don't let the concept trie emit them a
+        # second time (e.g. "must" is also the English gloss of root gum).
+        if w in MODALS and MODALS[w]:
+            i += 1
+            continue
         if w == "than":
             out.append("an")
             i += 1
@@ -635,6 +643,7 @@ def en2sn(text: str, strict=False):
                         "English 'we' is ambiguous; Senel requires a choice. "
                         "Used mon (we, NOT including you) — swap to mun to include them.")
                 if table is MODALS:
+                    modal = val  # multi-word modals ("need to") emit at the verb slot
                     matched = True
                     i += span
                     break
@@ -783,12 +792,13 @@ PRON_EN = {"min": ("I", "me"), "sin": ("you", "you"), "tin": ("it", "it"),
            "pan": ("one", "one"), "sel": ("oneself", "oneself"),
            "tal": ("each other", "each other")}
 ROOT_EN = {"em": "exist", "es": "is", "gan": "do"}
-MODAL_ROOTS_EN = {"gol": "can", "gum": "must", "fus": "may", "far": "need to"}
+MODAL_ROOTS_EN = {"gol": "can", "gum": "must", "gumdi": "should",
+                  "fus": "may", "far": "need to"}
 IRREGULAR_PAST = {"go": "went", "come": "came", "see": "saw", "say": "said",
                   "tell": "told", "make": "made", "do": "did", "take": "took",
                   "give": "gave", "get": "got", "eat": "ate", "drink": "drank",
                   "sleep": "slept", "know": "knew", "think": "thought",
-                  "feel": "felt", "hear": "heard", "run": "ran",
+                  "feel": "felt", "hear": "heard", "run": "ran", "sing": "sang",
                   "write": "wrote", "buy": "bought", "sell": "sold",
                   "pay": "paid", "build": "built", "break": "broke",
                   "leave": "left", "meet": "met", "find": "found",
@@ -1092,18 +1102,27 @@ def export_data(target: Path):
 
 
 def export_aliases(target: Path):
-    payload = {
-        "raw": ALIASES_PATH.read_text(encoding="utf-8"),
+    """Emit docs/aliases.js: the TSV verbatim in a template literal, plus the
+    English-side tables. Keeping `raw` a template literal lets tests/test_translation
+    assert it is byte-for-byte identical to english_aliases.tsv, and regenerating from
+    here (not a hand-edit) means table changes such as MODALS can never drift."""
+    tsv = ALIASES_PATH.read_text(encoding="utf-8")
+    if "`" in tsv or "${" in tsv:
+        raise ValueError("english_aliases.tsv contains a template-literal metacharacter")
+    fields = {
         "contractions": CONTRACTIONS,
         "pastIrregularForms": sorted(PAST_IRREGULAR_FORMS),
         "modals": {k: v for k, v in MODALS.items() if v},
         "modalRootsEn": MODAL_ROOTS_EN,
     }
+    lines = ["window.SENEL_ENGLISH = {", f"  raw: `{tsv}`,"]
+    items = list(fields.items())
+    for idx, (key, value) in enumerate(items):
+        comma = "," if idx < len(items) - 1 else ""
+        lines.append(f"  {key}: {json.dumps(value, ensure_ascii=False)}{comma}")
     target.parent.mkdir(parents=True, exist_ok=True)
-    target.write_text("window.SENEL_ENGLISH = "
-                      + json.dumps(payload, ensure_ascii=False) + ";\n",
-                      encoding="utf-8")
-    alias_count = sum(1 for line in payload["raw"].splitlines()
+    target.write_text("\n".join(lines) + "\n};\n", encoding="utf-8")
+    alias_count = sum(1 for line in tsv.splitlines()
                       if line and not line.startswith("#"))
     print(f"wrote {target} ({target.stat().st_size // 1024} KB, "
           f"{alias_count} alias groups)")
@@ -1116,6 +1135,7 @@ def main(argv):
     cmd = argv[1]
     if cmd == "data":
         export_data(HERE / "docs" / "data.js")
+        export_aliases(HERE / "docs" / "aliases.js")
         return 0
     strict = "--strict" in argv[2:]
     text = " ".join(arg for arg in argv[2:] if arg != "--strict")
