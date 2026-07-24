@@ -22,6 +22,12 @@
 </header>
 
 <main>
+  <nav class="tabs" role="tablist">
+    <button id="tabTranslate" class="tab active" role="tab" aria-selected="true">Translate</button>
+    <button id="tabLearn" class="tab" role="tab" aria-selected="false">Learn</button>
+  </nav>
+
+  <div id="translateView">
   <div class="langbar">
     <button class="lang" id="fromLang">English</button>
     <button class="swap" id="swap" title="Swap languages" aria-label="Swap languages">⇄</button>
@@ -104,6 +110,47 @@
           both”, <code>pu</code> is “exactly one”.</p>
       </div>
     </div>
+  </section>
+  </div><!-- /translateView -->
+
+  <section id="learnView" hidden>
+    <div class="learnIntro">
+      <h2>Learn to read Senel</h2>
+      <p>Every root is one syllable: the <b>first consonant</b> is the semantic domain,
+        the <b>vowel</b> the subdomain, the <b>last consonant</b> the item. Learn the
+        16 domains and the rest of the vocabulary decodes itself.</p>
+    </div>
+
+    <h3 class="learnHead">The 16 domains</h3>
+    <p class="hint">Tap a domain to open its map.</p>
+    <div id="domainGrid" class="domainGrid" role="list"></div>
+    <div id="domainDetail" class="domainDetail" hidden></div>
+
+    <section class="drill">
+      <h3 class="learnHead">Decode a word</h3>
+      <p class="hint">Read the word's first sound, then pick its domain.</p>
+      <div class="drillCard">
+        <div id="drillWord" class="drillWord">—</div>
+        <div id="drillChoices" class="drillChoices"></div>
+        <div id="drillReveal" class="drillReveal" hidden></div>
+        <div class="drillFoot">
+          <span id="drillScore" class="drillScore">streak 0 · best 0</span>
+          <button id="drillNext" class="ghost" type="button">New word →</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="familyLesson">
+      <h3 class="learnHead">The cost, shown honestly</h3>
+      <p>Because the item sits in the sound the ear hears least well and the domain sits
+        first, whole families of common words differ only in that first consonant. Hear
+        it wrong and the topic changes. This is the measured price of building words from
+        meaning — not hidden, but part of the lesson.</p>
+      <div id="familyDemo" class="familyDemo"></div>
+      <button id="familyNext" class="ghost" type="button">Another family →</button>
+      <p class="small">The full analysis, and why the forms are left this way, is in
+        <a href="https://github.com/throwingogo-hub/senel/blob/main/ROBUSTNESS.md">ROBUSTNESS.md</a>.</p>
+    </section>
   </section>
 </main>
 

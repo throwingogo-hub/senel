@@ -221,3 +221,88 @@ footer {
   color: var(--muted); font-size: .85rem;
 }
 footer a { color: var(--accent); }
+
+/* ---------- tabs + learn mode ---------- */
+.tabs { display: flex; gap: 8px; margin-bottom: 18px; }
+.tab {
+  padding: 8px 18px; border: 1px solid var(--line); background: var(--panel);
+  color: var(--muted); border-radius: 999px; font-size: .95rem; font-weight: 600;
+  cursor: pointer;
+}
+.tab.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+.learnIntro h2 { margin: 0 0 6px; }
+.learnIntro p { margin: 0 0 8px; color: var(--muted); }
+.learnHead { margin: 28px 0 4px; }
+
+.domainGrid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px;
+}
+.domainTile {
+  display: flex; align-items: center; gap: 10px; text-align: left;
+  padding: 12px 14px; border: 1px solid var(--line); background: var(--panel);
+  border-radius: var(--radius); cursor: pointer; color: var(--ink);
+}
+.domainTile:hover { border-color: var(--accent); }
+.domainTile.active { border-color: var(--accent); background: var(--accent-soft); }
+.dLetter {
+  font-family: ui-monospace, Menlo, monospace; font-weight: 700; font-size: 1.25rem;
+  width: 30px; height: 30px; flex: none; display: grid; place-items: center;
+  background: var(--accent); color: #fff; border-radius: 8px;
+}
+.dLetter.big { width: 36px; height: 36px; font-size: 1.4rem; }
+.dName { font-size: .9rem; }
+
+.domainDetail {
+  margin-top: 14px; padding: 16px 18px;
+  border: 1px solid var(--line); border-radius: var(--radius); background: var(--panel);
+}
+.domainDetail h4 { margin: 0 0 12px; display: flex; align-items: center; gap: 10px; }
+.subRow {
+  display: grid; grid-template-columns: 70px 130px 1fr; gap: 10px; align-items: baseline;
+  padding: 7px 0; border-top: 1px solid var(--line);
+}
+.subVowel { font-family: ui-monospace, Menlo, monospace; color: var(--accent); font-weight: 600; }
+.subName { color: var(--muted); font-size: .88rem; }
+.subRoots code {
+  display: inline-block; margin: 0 6px 4px 0; padding: 1px 6px;
+  background: var(--bg); border: 1px solid var(--line); border-radius: 6px; font-size: .85rem;
+}
+
+.drillCard, .familyDemo {
+  margin-top: 8px; padding: 18px; border: 1px solid var(--line);
+  border-radius: var(--radius); background: var(--panel);
+}
+.drillWord {
+  font-family: ui-monospace, Menlo, monospace; font-size: 2.6rem; font-weight: 700;
+  text-align: center; letter-spacing: 2px; margin-bottom: 14px;
+}
+.drillChoices { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.choice {
+  padding: 10px 12px; border: 1px solid var(--line); background: var(--bg);
+  border-radius: 10px; cursor: pointer; color: var(--ink); font-size: .92rem; text-align: left;
+}
+.choice:hover:not(:disabled) { border-color: var(--accent); }
+.choice.right { background: #1f9d5522; border-color: #1f9d55; color: var(--ink); }
+.choice.wrong { background: #d33a3a22; border-color: #d33a3a; }
+.drillReveal { margin-top: 14px; text-align: center; font-size: 1.05rem; }
+.drillReveal .muted { color: var(--muted); }
+.drillFoot { display: flex; justify-content: space-between; align-items: center; margin-top: 14px; }
+.drillScore { color: var(--muted); font-size: .9rem; }
+
+.familyLesson p { color: var(--muted); }
+.famHead { margin: 0 0 12px; color: var(--ink) !important; }
+.famRow { display: flex; flex-wrap: wrap; gap: 10px; }
+.famWord {
+  display: flex; flex-direction: column; min-width: 78px;
+  padding: 8px 10px; background: var(--bg); border: 1px solid var(--line); border-radius: 8px;
+}
+.famWord b { font-family: ui-monospace, Menlo, monospace; font-size: 1.05rem; }
+.famWord span { color: var(--muted); font-size: .8rem; }
+#familyNext { margin-top: 14px; }
+
+@media (max-width: 560px) {
+  .subRow { grid-template-columns: 56px 1fr; }
+  .subRow .subRoots { grid-column: 1 / -1; }
+  .drillChoices { grid-template-columns: 1fr; }
+}
