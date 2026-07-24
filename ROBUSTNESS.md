@@ -70,8 +70,20 @@ words, and only when needed.*
 and codas so the top-frequency words aren't all in one rhyme family. *Cost: smaller than B;
 weakens the "same subdomain = same vowel" regularity a little.*
 
-**Recommendation depends on the goal.** For a *usable spoken* language, B or C is
-unavoidable — robustness is not optional for speech. For an *intellectual art project*,
-A is correct and honest: the fragility is the visible cost of the compression, and hiding
-it would be dishonest. For a *teaching tool*, A plus this document is ideal — the tension
-is exactly the lesson. Nothing here has been changed yet; the forms are intact.
+## Decision: Option A
+
+Senel is an **art project and a teaching tool**, not a spoken auxiliary language.
+**Option A is adopted.** The forms are left intact and the noise-robustness cost is
+measured here rather than engineered away.
+
+This is not a deferral — it is the coherent choice for what Senel is. The whole project
+is an argument that vocabulary *can* be derived from meaning, stated honestly including
+its price (SPEC §0 and §9). The 56% onset-collision figure is not a defect to hide; it is
+the measured cost of the compression, and for an art project reporting it *is* the
+integrity of the piece, while for a teaching tool the tension between density and
+robustness *is* the lesson. Re-engineering the forms to look robust would falsify the
+one thing the project exists to demonstrate.
+
+Options B–D stay on record. If Senel is ever repurposed as a spoken language — where
+robustness stops being optional — B or C becomes necessary, and this analysis is the
+starting point. Until then, the forms do not change.
