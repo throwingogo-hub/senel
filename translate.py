@@ -863,7 +863,9 @@ def sn2en(text: str):
     recs = []
     evidential, question, imperative, tag = "", False, False, ""
 
-    for tok in re.findall(r"«[^»]*»|\[[^\]]*\]|[A-Za-z]+", text):
+    toks = re.findall(r"«[^»]*»|\[[^\]]*\]|[A-Za-z]+", text)
+    has_comparative = any(t.lower() in ("mi", "li") for t in toks)
+    for tok in toks:
         if tok.startswith("«") or tok.startswith("["):
             foreign = tok[1:-1]
             recs.append({"kind": "foreign", "text": foreign})
@@ -898,6 +900,8 @@ def sn2en(text: str):
             continue
         if cls == "ROLE":
             role = ROLE_EN.get(low)
+            if low == "an" and has_comparative:
+                role = "than"  # "more big from" -> "bigger than" in a comparison
             if role:
                 recs.append({"kind": "word", "text": role})
             continue
@@ -1045,11 +1049,16 @@ def sn2en(text: str):
             else:
                 words.append(_third(verb) if third_sg else verb)
             continue
-        if subject is None and k in ("derived", "foreign"):
-            subject = item["text"]
+        if subject is None and k in ("derived", "foreign", "det"):
+            subject = item["text"]  # a demonstrative subject ("this is …") needs no "it"
         words.append(item["text"])
 
     sentence = " ".join(w for w in words if w).strip()
+    sentence = _naturalise(sentence)
+    if question:
+        # yes/no question: invert subject and copula ("you are happy" -> "are you happy")
+        sentence = re.sub(r"^(\w+) (is|are|am|was|were) (.+)$",
+                          r"\2 \1 \3", sentence)
     if imperative:
         sentence = "please " + sentence
     sentence = sentence[:1].upper() + sentence[1:] if sentence else ""
@@ -1059,6 +1068,35 @@ def sn2en(text: str):
     if evidential:
         sentence += f"  {evidential}"
     return sentence, notes
+
+
+_POSSESSIVE_EN = {"me": "my", "you": "your", "him": "his", "her": "her",
+                  "it": "its", "us": "our", "them": "their"}
+_COMPARATIVE_EN = {
+    "big": "bigger", "small": "smaller", "large": "larger", "tall": "taller",
+    "short": "shorter", "wide": "wider", "narrow": "narrower", "thick": "thicker",
+    "thin": "thinner", "long": "longer", "high": "higher", "low": "lower",
+    "old": "older", "young": "younger", "new": "newer", "fast": "faster",
+    "slow": "slower", "strong": "stronger", "weak": "weaker", "good": "better",
+    "bad": "worse", "hot": "hotter", "cold": "colder", "near": "nearer",
+    "far": "farther", "hard": "harder", "soft": "softer", "heavy": "heavier",
+    "light": "lighter"}
+_SUPERLATIVE_EN = {"good": "best", "bad": "worst"}
+for _adj, _comp in _COMPARATIVE_EN.items():
+    _SUPERLATIVE_EN.setdefault(
+        _adj, _comp[:-2] + "est" if _comp.endswith("er") else _comp)
+
+
+def _naturalise(sentence: str) -> str:
+    """Light idiom pass on assembled English so the output reads naturally."""
+    sentence = re.sub(
+        r"\bthe (\w+) of (me|you|him|her|it|us|them)\b",
+        lambda m: f"{_POSSESSIVE_EN[m.group(2)]} {m.group(1)}", sentence)
+    sentence = re.sub(r"\bmore (\w+)\b",
+                      lambda m: _COMPARATIVE_EN.get(m.group(1), m.group(0)), sentence)
+    sentence = re.sub(r"\bmost (\w+)\b",
+                      lambda m: _SUPERLATIVE_EN.get(m.group(1), m.group(0)), sentence)
+    return sentence
 
 
 def be_start(subject):

@@ -432,11 +432,35 @@
     return /(?:s|sh|ch|x|o)$/.test(v) ? v + "es" : v + "s";
   });
 
+  const POSSESSIVE_EN = { me: "my", you: "your", him: "his", her: "her",
+    it: "its", us: "our", them: "their" };
+  const COMPARATIVE_EN = { big: "bigger", small: "smaller", large: "larger",
+    tall: "taller", short: "shorter", wide: "wider", narrow: "narrower",
+    thick: "thicker", thin: "thinner", long: "longer", high: "higher", low: "lower",
+    old: "older", young: "younger", new: "newer", fast: "faster", slow: "slower",
+    strong: "stronger", weak: "weaker", good: "better", bad: "worse", hot: "hotter",
+    cold: "colder", near: "nearer", far: "farther", hard: "harder", soft: "softer",
+    heavy: "heavier", light: "lighter" };
+  const SUPERLATIVE_EN = { good: "best", bad: "worst" };
+  for (const [adj, comp] of Object.entries(COMPARATIVE_EN))
+    if (!(adj in SUPERLATIVE_EN))
+      SUPERLATIVE_EN[adj] = comp.endsWith("er") ? comp.slice(0, -2) + "est" : comp;
+
+  function naturalise(s) {
+    s = s.replace(/\bthe (\w+) of (me|you|him|her|it|us|them)\b/g,
+      (m, n, p) => `${POSSESSIVE_EN[p]} ${n}`);
+    s = s.replace(/\bmore (\w+)\b/g, (m, a) => COMPARATIVE_EN[a] || m);
+    s = s.replace(/\bmost (\w+)\b/g, (m, a) => SUPERLATIVE_EN[a] || m);
+    return s;
+  }
+
   function sn2en(text) {
     const notes = [], recs = [];
     let evidential = "", question = false, imperative = false, tag = "";
 
-    for (const tok of text.match(/«[^»]*»|\[[^\]]*\]|[A-Za-z]+/g) || []) {
+    const toks = text.match(/«[^»]*»|\[[^\]]*\]|[A-Za-z]+/g) || [];
+    const hasComparative = toks.some((t) => ["mi", "li"].includes(t.toLowerCase()));
+    for (const tok of toks) {
       if (tok.startsWith("«") || tok.startsWith("[")) {
         const foreign = tok.slice(1, -1);
         recs.push({ kind: "foreign", text: foreign });
@@ -459,7 +483,8 @@
       }
       if (cls === "ASP") { recs.push({ kind: "asp", asp: low }); continue; }
       if (cls === "ROLE") {
-        const r = T.roleEn[low];
+        let r = T.roleEn[low];
+        if (low === "an" && hasComparative) r = "than";
         if (r) recs.push({ kind: "word", text: r });
         continue;
       }
@@ -587,11 +612,14 @@
         else words.push(thirdSg ? third(verb) : verb);
         continue;
       }
-      if (subject === null && (k === "derived" || k === "foreign")) subject = item.text;
+      if (subject === null && (k === "derived" || k === "foreign" || k === "det"))
+        subject = item.text;
       words.push(item.text);
     }
 
     let s = words.filter(Boolean).join(" ").trim();
+    s = naturalise(s);
+    if (question) s = s.replace(/^(\w+) (is|are|am|was|were) (.+)$/, "$2 $1 $3");
     if (imperative) s = "please " + s;
     s = s ? s.charAt(0).toUpperCase() + s.slice(1) : "";
     s += question ? "?" : ".";

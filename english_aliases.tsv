@@ -396,3 +396,9 @@ while	gram	yir	whilst|meanwhile
 # --- verb & misc gaps found in expressiveness audit ---
 sing	verb	nosnel	
 tail	noun	kitkop	
+
+# --- reverse-gloss aliases for the productive size adjectives ---
+big	property	urgo	large
+small	property	urdi	little
+tall	property	wosgo	
+short	property	wopdi	
