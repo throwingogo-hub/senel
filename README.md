@@ -7,7 +7,7 @@
 
 <p align="center">
   <a href="https://github.com/throwingogo-hub/senel/actions/workflows/validate.yml"><img alt="validate" src="https://github.com/throwingogo-hub/senel/actions/workflows/validate.yml/badge.svg"></a>
-  <img alt="roots" src="https://img.shields.io/badge/roots-558-blue">
+  <img alt="roots" src="https://img.shields.io/badge/roots-559-blue">
   <img alt="irregular forms" src="https://img.shields.io/badge/irregular%20forms-0-brightgreen">
   <img alt="license" src="https://img.shields.io/badge/license-MIT-lightgrey">
 </p>
@@ -34,7 +34,7 @@ In Senel, a word is **built out of its meaning**:
    └──────────────────── domain: living kinds
 ```
 
-So you don't memorise 558 unrelated words. You learn **16 domains**, and the rest
+So you don't memorise 559 unrelated words. You learn **16 domains**, and the rest
 decodes itself:
 
 | | | | | |
@@ -115,7 +115,7 @@ vocabulary — food, animals, colours, the body, family, weather — is covered 
 language itself works: `lunch` is `yenhem` ("day-meal"), `red` is `ninkel`
 ("colour-of-blood"), `son` is `relrom` ("male-child"), all composed from existing roots
 rather than borrowed. The catalogue contains more than 1,100 English expressions while
-the language itself remains almost entirely the same 558-root system.
+the language itself remains almost entirely the same 559-root system.
 
 English also omits things Senel requires — and rather than quietly guessing, the
 translator tells you what it had to decide:
@@ -154,7 +154,7 @@ python3 senel.py validate                # prove the language obeys its own rule
 python3 senel.py gloss "Lol ka mo."      # interlinear gloss
 python3 senel.py count "Ran lam har fum nu es i fom nu rum yo."
 python3 senel.py merge japanese          # which words collapse for a given L1's ear
-python3 build_lexicon.py                 # regenerate all 558 roots from the semantic map
+python3 build_lexicon.py                 # regenerate all 559 roots from the semantic map
 python3 translate.py en2sn "I don't know."
 python3 tests/test_examples.py           # every example in the docs must parse
 python3 tests/test_translation.py        # contractions, morphology and fallback regressions
@@ -170,8 +170,8 @@ The vocabulary isn't a hand-written list — it's **generated** from a semantic 
 [`build_lexicon.py`](build_lexicon.py), and every structural claim is verified in CI:
 
 ```
-lexicon            636 entries
-  content roots    558  (558 monosyllabic, 100%)
+lexicon            638 entries
+  content roots    559  (559 monosyllabic, 100%)
   grammar words    65   (all monosyllabic)
   irregular forms  0    (no root ever changes shape)
 
@@ -226,7 +226,7 @@ compression, parse ambiguity and irregularity — which is what this project tar
 
 - **[SPEC.md](SPEC.md)** — complete reference grammar: phonology, the full semantic map,
   every grammar word, subordination, numbers, and the measurements
-- **[lexicon.tsv](lexicon.tsv)** — all 636 entries with their derivations
+- **[lexicon.tsv](lexicon.tsv)** — all 638 entries with their derivations
 - **[examples/phrasebook.md](examples/phrasebook.md)** — everyday phrases, with literal glosses
 - **[CONTRIBUTING.md](CONTRIBUTING.md)** — how to add roots without breaking the system
 
