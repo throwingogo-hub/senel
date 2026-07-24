@@ -421,7 +421,11 @@ python3 senel.py validate         # phonotactics, collisions, confusability, ech
 python3 senel.py gloss "<text>"   # interlinear gloss, decomposes derivations
 python3 senel.py count "<text>"   # syllable count
 python3 senel.py merge            # which words collapse for a given L1's ear
+python3 senel.py robust           # noise-robustness: where minimal pairs concentrate
 ```
+
+Robustness is analysed in [ROBUSTNESS.md](ROBUSTNESS.md); building vocabulary is covered
+in [COOKBOOK.md](COOKBOOK.md).
 
 `validate` currently reports: 559 roots, 100% one syllable, 65 grammar words,
 **0 irregular forms**, 0 phonotactic violations, 0 shape-rule violations, 0 duplicate

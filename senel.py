@@ -199,6 +199,53 @@ def merger_report(profile_name=None):
     return 1 if worst else 0
 
 
+def robustness_report():
+    """Where noise-robustness is weakest: a minimal pair whose ONSET differs changes
+    the domain (topic), which context cannot always repair; one whose CODA differs is a
+    near-miss inside the same subdomain. This quantifies the split and names the densest
+    neighbourhoods, so form choices for high-frequency roots can be made deliberately."""
+    entries = load_lexicon()
+    roots = [e for e in entries if e["class"] in ("ROOT", "NUM")]
+    forms = [e["form"] for e in roots]
+    gloss = {e["form"]: e["gloss"] for e in roots}
+    pairs = edit_neighbours(forms)
+    total = len(pairs)
+    pos = defaultdict(int)
+    for a, b in pairs:
+        if len(a) == 3:
+            pos[next(i for i in range(3) if a[i] != b[i])] += 1
+        else:
+            pos["other"] += 1
+    print(f"confusability: {total} minimal pairs among {len(forms)} roots\n")
+    print(f"  onset differs -> different DOMAIN (topic changes): "
+          f"{pos[0]} ({pos[0] * 100 // total}%)")
+    print(f"  vowel differs -> different subdomain:              "
+          f"{pos[1]} ({pos[1] * 100 // total}%)")
+    print(f"  coda  differs -> same subdomain (recoverable):     "
+          f"{pos[2]} ({pos[2] * 100 // total}%)")
+    if pos["other"]:
+        print(f"  other lengths:                                     {pos['other']}")
+
+    families = defaultdict(list)
+    for f in forms:
+        if len(f) == 3:
+            families[f[1:]].append(f)
+    dense = sorted((v for v in families.values() if len(v) >= 6),
+                   key=len, reverse=True)
+    print("\ndensest onset-only families (every member one consonant from the rest):")
+    for members in dense[:6]:
+        print(f"  -{members[0][1:]}: {' '.join(sorted(members))}  ({len(members)})")
+
+    neighbours = defaultdict(int)
+    for a, b in pairs:
+        neighbours[a] += 1
+        neighbours[b] += 1
+    print("\nmost-confusable individual roots:")
+    for f, c in sorted(neighbours.items(), key=lambda kv: -kv[1])[:8]:
+        print(f"  {f} ({gloss[f]}): {c} one-phoneme neighbours")
+    return 0
+
+
 def epenthesis_check():
     """CV-language speakers release codas with a short echo vowel: kas -> [kasɯ].
     That is only safe if no root equals another root plus a final vowel."""
@@ -377,6 +424,8 @@ def main(argv):
         return rc
     if cmd == "merge":
         return merger_report(argv[2] if len(argv) > 2 else None)
+    if cmd == "robust":
+        return robustness_report()
     if cmd == "gloss":
         return gloss(" ".join(argv[2:]))
     if cmd == "count":

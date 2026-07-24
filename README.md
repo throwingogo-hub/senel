@@ -228,6 +228,7 @@ compression, parse ambiguity and irregularity — which is what this project tar
   every grammar word, subordination, numbers, and the measurements
 - **[COOKBOOK.md](COOKBOOK.md)** — how to build any word (reuse, derive, compound) and
   say complex sentences, with the productive patterns
+- **[ROBUSTNESS.md](ROBUSTNESS.md)** — the noise-robustness cost, measured, with options
 - **[lexicon.tsv](lexicon.tsv)** — all 638 entries with their derivations
 - **[examples/phrasebook.md](examples/phrasebook.md)** — everyday phrases, with literal glosses
 - **[CONTRIBUTING.md](CONTRIBUTING.md)** — how to add roots without breaking the system
