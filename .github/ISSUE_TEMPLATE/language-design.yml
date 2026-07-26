@@ -1,0 +1,51 @@
+name: Language-design proposal
+description: Propose a justified change to the semantic map, grammar, or documented rules.
+title: "[Language]: "
+labels:
+  - enhancement
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Senel's forms are derived from meaning, not invented freely. Proposals should
+        preserve that rule and address the measured tradeoffs, including sound collisions.
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What cannot be expressed, decoded, taught, or distinguished today?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed change
+      description: Name the affected domain, subdomain, root, grammar word, or rule.
+    validations:
+      required: true
+  - type: textarea
+    id: derivation
+    attributes:
+      label: Why this form follows from its meaning
+      description: Show why reuse, derivation, or compounding is not sufficient first.
+    validations:
+      required: true
+  - type: textarea
+    id: tradeoffs
+    attributes:
+      label: Tradeoffs and collision impact
+      description: Include relevant `senel.py validate` or `senel.py merge` output.
+      render: shell
+    validations:
+      required: true
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Design checks
+      options:
+        - label: I read SPEC.md, COOKBOOK.md, ROBUSTNESS.md, and CONTRIBUTING.md.
+          required: true
+        - label: I checked whether an existing root, derivation, or compound already expresses this concept.
+          required: true
+        - label: I will update tests and generated outputs if the proposal is accepted.
+          required: true

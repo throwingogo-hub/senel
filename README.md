@@ -13,7 +13,15 @@
 </p>
 
 <p align="center">
-  <a href="https://throwingogo-hub.github.io/senel/"><b>→ Try the translator in your browser ←</b></a>
+  <a href="https://throwingogo-hub.github.io/senel/"><b>Try the live Translator + Learn lab →</b></a><br>
+  Translate both ways, explore all 16 meaning domains, and practise decoding roots.<br>
+  No install, account, server, or API key.
+</p>
+
+<p align="center">
+  <a href="https://throwingogo-hub.github.io/senel/">
+    <img src="docs/assets/translator-preview.png" width="960" alt="The Senel browser translator turning I am going to your house into Min bal ka o pin en sin lo, with a word-by-word explanation">
+  </a>
 </p>
 
 ---
@@ -232,6 +240,24 @@ compression, parse ambiguity and irregularity — which is what this project tar
 - **[lexicon.tsv](lexicon.tsv)** — all 638 entries with their derivations
 - **[examples/phrasebook.md](examples/phrasebook.md)** — everyday phrases, with literal glosses
 - **[CONTRIBUTING.md](CONTRIBUTING.md)** — how to add roots without breaking the system
+
+## Current status
+
+**v1.9.0 is release-ready.** The translator, interactive Learn mode, 559-root semantic
+map, 65 grammar words, generated-data checks, documentation examples, English coverage,
+and Python/browser parity are all gated in CI. The language remains an art project and
+teaching tool; its measured noise-robustness cost is documented rather than engineered
+away. See **[CHANGELOG.md](CHANGELOG.md)** for the release notes.
+
+The next useful contributions are translator edge cases, clearer lessons and examples,
+and carefully justified coverage for medicine, law, and engineering. Small fixes are
+welcome—start with a [good first issue](https://github.com/throwingogo-hub/senel/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22)
+or use the focused issue forms.
+
+If Senel made you look at language differently, **[star the repository](https://github.com/throwingogo-hub/senel)**
+so more curious builders can find it. Questions, experiments, and “what if?” ideas belong
+in **[Discussions](https://github.com/throwingogo-hub/senel/discussions)**; concrete bugs
+and scoped proposals belong in **[Issues](https://github.com/throwingogo-hub/senel/issues)**.
 
 ## License
 

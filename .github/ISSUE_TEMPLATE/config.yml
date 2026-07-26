@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Questions and experiments
+    url: https://github.com/throwingogo-hub/senel/discussions
+    about: Ask how Senel works, share something you made, or explore an open-ended idea.
+  - name: Live Translator + Learn lab
+    url: https://throwingogo-hub.github.io/senel/
+    about: Reproduce translator behaviour or try the interactive lessons in your browser.
