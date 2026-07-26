@@ -1,0 +1,67 @@
+name: Translator bug
+description: Report a wrong, inconsistent, or unclear English ⇄ Senel translation.
+title: "[Translator]: "
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for finding an edge case. Senel requires distinctions English often omits,
+        so please include the translator's notes and word-by-word breakdown where relevant.
+  - type: dropdown
+    id: surface
+    attributes:
+      label: Translator surface
+      options:
+        - Browser translator
+        - Python CLI
+        - Both
+    validations:
+      required: true
+  - type: dropdown
+    id: direction
+    attributes:
+      label: Direction
+      options:
+        - English → Senel
+        - Senel → English
+    validations:
+      required: true
+  - type: textarea
+    id: input
+    attributes:
+      label: Exact input
+      description: Paste the smallest sentence that reproduces the problem.
+      render: text
+    validations:
+      required: true
+  - type: textarea
+    id: output
+    attributes:
+      label: Actual output and notes
+      description: Include any evidential, ambiguity, unknown-word, or resolver notes.
+      render: text
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behaviour
+      description: Explain what should happen and why, with a SPEC.md reference if possible.
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Version or commit
+      placeholder: v1.9.0, a commit hash, or the date you used the live site
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Before submitting
+      options:
+        - label: I checked for an existing issue with the same input.
+          required: true
+        - label: I have not hidden an unknown term by assigning it an approximate meaning.
+          required: true

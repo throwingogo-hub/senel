@@ -1,0 +1,39 @@
+name: Small contribution
+description: Suggest a focused docs, lesson, test, accessibility, or tooling improvement.
+title: "[Small improvement]: "
+labels:
+  - enhancement
+  - good first issue
+body:
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Documentation or examples
+        - Learn mode
+        - Translator test coverage
+        - Accessibility or responsive UI
+        - Developer tooling
+    validations:
+      required: true
+  - type: textarea
+    id: change
+    attributes:
+      label: Proposed small change
+      description: Keep the scope narrow enough for one pull request.
+    validations:
+      required: true
+  - type: textarea
+    id: value
+    attributes:
+      label: Who it helps and how
+    validations:
+      required: true
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Scope check
+      options:
+        - label: This does not change the language design or hand-edit a generated file.
+          required: true
