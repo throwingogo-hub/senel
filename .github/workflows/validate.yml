@@ -16,7 +16,7 @@ jobs:
           python-version: "3.12"
       - uses: actions/setup-node@v7
         with:
-          node-version: "20"
+          node-version: "24"
 
       - name: The lexicon must match its semantic map
         run: |
@@ -42,3 +42,6 @@ jobs:
 
       - name: Python and JavaScript must translate identically
         run: python3 tests/test_parity.py
+
+      - name: The public site must expose current discovery metadata
+        run: python3 tests/test_site_metadata.py
